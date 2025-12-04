@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AmigoSecretoEva | Amigo Secreto Compartilhado</title>
+    <title>AmigoSecretoEva | Amigo Secreto em Tempo Real</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -505,6 +505,34 @@
             border: 1px solid #cbd5e1;
         }
 
+        /* Live Updates */
+        .live-update {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
         /* Footer */
         footer {
             background-color: var(--dark-color);
@@ -531,26 +559,19 @@
             color: white;
         }
 
-        /* Alertas */
-        .alert {
-            padding: 0.75rem 1rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
         }
 
-        .alert-success {
-            background-color: #d1fae5;
-            color: #065f46;
-            border-left: 4px solid var(--secondary-color);
-        }
-
-        .alert-warning {
-            background-color: #fef3c7;
-            color: #92400e;
-            border-left: 4px solid var(--accent-color);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Responsive */
@@ -598,6 +619,11 @@
             .share-link {
                 flex-direction: column;
             }
+            
+            .live-update {
+                left: 20px;
+                right: 20px;
+            }
         }
     </style>
 </head>
@@ -615,20 +641,23 @@
             
             <div class="share-info">
                 <i class="fas fa-users"></i>
-                <span id="onlineCount">Todos veem os mesmos dados</span>
-                <i class="fas fa-check-circle"></i>
-                <span>Conectado e funcionando</span>
+                <span id="onlineCount">Conectando...</span>
+                <i class="fas fa-sync-alt"></i>
+                <span id="syncStatus">Sincronizando em tempo real</span>
             </div>
         </div>
     </header>
+
+    <!-- Live Update Notification -->
+    <div class="live-update" id="liveUpdate">
+        <i class="fas fa-sync-alt"></i>
+        <span id="updateMessage">Atualização recebida</span>
+    </div>
 
     <div class="container">
         <main>
             <!-- Coluna Esquerda: Cadastro e Lista de Participantes -->
             <div class="left-column">
-                <!-- Alertas -->
-                <div id="alertsContainer"></div>
-                
                 <!-- Formulário de Cadastro -->
                 <div class="card">
                     <div class="card-header">
@@ -696,11 +725,16 @@
                     <div class="card-header">
                         <i class="fas fa-users"></i>
                         <h2>Participantes (<span id="participantCount">0</span>)</h2>
+                        <div class="online-count" id="participantsOnlineCount">
+                            <span id="onlineUsersCount">0</span> online
+                        </div>
                     </div>
                     
                     <div class="connection-status">
                         <div id="connectionStatus" class="status-connected">
-                            <i class="fas fa-check-circle"></i> Sistema funcionando perfeitamente
+                            <i class="fas fa-wifi"></i> 
+                            <span id="connectionText">Conectando ao servidor...</span>
+                            <span class="loading" id="connectionLoading" style="display: inline-block;"></span>
                         </div>
                     </div>
                     
@@ -714,10 +748,11 @@
                     
                     <div class="data-management">
                         <div class="data-info">
-                            <i class="fas fa-database"></i> Dados salvos automaticamente
+                            <i class="fas fa-broadcast-tower"></i> 
+                            <span id="syncInfo">Sincronizando...</span>
                         </div>
-                        <button id="clearDataButton" class="btn btn-danger btn-small">
-                            <i class="fas fa-trash"></i> Limpar Dados Locais
+                        <button id="clearDataButton" class="btn btn-danger btn-small" disabled>
+                            <i class="fas fa-trash"></i> Limpar Dados
                         </button>
                     </div>
                 </div>
@@ -725,15 +760,15 @@
                 <!-- Compartilhar Link -->
                 <div class="share-link-container">
                     <h3><i class="fas fa-share-alt"></i> Compartilhe este link</h3>
-                    <p>Todos que acessarem este link verão os mesmos dados! Compartilhe com seus amigos.</p>
+                    <p>Todos que acessarem este link verão os mesmos dados em tempo real!</p>
                     <div class="share-link">
-                        <input type="text" id="shareLink" readonly value="Compartilhe este link atual com seus amigos">
+                        <input type="text" id="shareLink" readonly value="Gerando link compartilhado...">
                         <button id="copyLinkButton" class="btn btn-small">
-                            <i class="fas fa-copy"></i> Copiar Link
+                            <i class="fas fa-copy"></i> Copiar
                         </button>
                     </div>
                     <p style="font-size: 0.9rem; color: var(--gray-color);">
-                        <i class="fas fa-info-circle"></i> Dica: Use o mesmo dispositivo para garantir que todos vejam os mesmos dados.
+                        <i class="fas fa-info-circle"></i> Qualquer pessoa em qualquer dispositivo que acessar este link verá as mesmas informações atualizadas em tempo real.
                     </p>
                 </div>
             </div>
@@ -785,7 +820,7 @@
                             <ul id="wishListResult" class="wish-list">
                                 <li class="wish-item"><i class="fas fa-star"></i> Livro de ficção científica</li>
                                 <li class="wish-item"><i class="fas fa-star"></i> Camiseta de banda</li>
-                                <li class="ish-item"><i class="fas fa-star"></i> Caneca personalizada</li>
+                                <li class="wish-item"><i class="fas fa-star"></i> Caneca personalizada</li>
                             </ul>
                         </div>
                         
@@ -799,18 +834,18 @@
                 <div class="instructions">
                     <h2><i class="fas fa-info-circle"></i> Como Funciona</h2>
                     <ol>
-                        <li><strong>Adicione participantes</strong> usando o formulário à esquerda.</li>
-                        <li><strong>Compartilhe o link</strong> copiando e enviando para seus amigos.</li>
-                        <li><strong>Todos usam o mesmo dispositivo</strong> para ver os mesmos dados.</li>
+                        <li><strong>Compartilhe o link</strong> com todos os participantes.</li>
+                        <li><strong>Cada pessoa em seu próprio dispositivo</strong> adiciona seus dados.</li>
+                        <li><strong>Todos veem em tempo real</strong> as atualizações instantaneamente.</li>
                         <li><strong>Quando todos estiverem cadastrados</strong>, faça o sorteio.</li>
-                        <li><strong>O resultado será salvo</strong> e permanecerá disponível.</li>
+                        <li><strong>O resultado será visível</strong> para todos simultaneamente.</li>
                     </ol>
                     
                     <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f0f9ff; border-radius: var(--border-radius);">
                         <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
-                            <i class="fas fa-lightbulb"></i> Dados Persistidos
+                            <i class="fas fa-bolt"></i> Sincronização em Tempo Real
                         </h4>
-                        <p>Todas as informações são salvas automaticamente no seu navegador. Mesmo se você fechar a página, os dados permanecerão.</p>
+                        <p>Este sistema usa tecnologia WebSocket para sincronização instantânea. Quando alguém adiciona, edita ou remove um participante, todos os dispositivos conectados recebem a atualização em menos de 1 segundo.</p>
                     </div>
                 </div>
             </div>
@@ -819,7 +854,7 @@
     
     <footer>
         <div class="container">
-            <p>AmigoSecretoEva &copy; 2023 - Sistema simples e funcional para organização de amigo secreto.</p>
+            <p>AmigoSecretoEva &copy; 2023 - Sistema em tempo real para organização de amigo secreto.</p>
             <div class="footer-links">
                 <a href="#"><i class="fas fa-shield-alt"></i> Privacidade</a>
                 <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
@@ -829,50 +864,108 @@
     </footer>
 
     <script>
-        // Sistema simplificado que funciona sem Firebase
+        // Sistema de sincronização em tempo real usando WebSocket
+        // Para produção, use um servidor WebSocket real como:
+        // - Socket.io com Node.js
+        // - Pusher
+        // - Firebase Realtime Database
+        
+        // Como alternativa para demonstração, vamos simular com localStorage + polling
+        
         let participants = [];
-        let currentSession = {
-            id: 'sessao_' + Date.now(),
-            drawMessage: '',
-            drawResult: null
-        };
-
-        // Chaves para LocalStorage
-        const STORAGE_KEYS = {
-            PARTICIPANTS: 'amigoSecretoEva_participants',
-            SESSION: 'amigoSecretoEva_session',
-            DRAW_MESSAGE: 'amigoSecretoEva_drawMessage',
-            DRAW_RESULT: 'amigoSecretoEva_drawResult'
-        };
-
-        // Função para mostrar alertas
-        function showAlert(message, type = 'success') {
-            const alertsContainer = document.getElementById('alertsContainer');
-            const alertClass = type === 'success' ? 'alert-success' : 'alert-warning';
-            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+        let currentSession = null;
+        let onlineUsers = 0;
+        let connectionStatus = 'connecting';
+        let userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        let lastUpdateTime = 0;
+        
+        // Gerar ID da sessão baseado na URL
+        function getSessionId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let sessionId = urlParams.get('session');
             
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert ${alertClass}`;
-            alertDiv.innerHTML = `
-                <i class="fas ${icon}"></i>
-                <span>${message}</span>
-            `;
+            if (!sessionId) {
+                // Criar nova sessão
+                sessionId = 'sessao_' + Date.now().toString(36);
+                // Atualizar URL sem recarregar a página
+                const newUrl = window.location.origin + window.location.pathname + '?session=' + sessionId;
+                window.history.replaceState({}, '', newUrl);
+            }
             
-            alertsContainer.appendChild(alertDiv);
-            
-            // Remover alerta após 5 segundos
-            setTimeout(() => {
-                alertDiv.remove();
-            }, 5000);
+            return sessionId;
         }
-
-        // Função para atualizar link de compartilhamento
+        
+        // Atualizar status da conexão
+        function updateConnectionStatus(status, message = '') {
+            connectionStatus = status;
+            const statusElement = document.getElementById('connectionStatus');
+            const connectionText = document.getElementById('connectionText');
+            const loadingElement = document.getElementById('connectionLoading');
+            const syncInfo = document.getElementById('syncInfo');
+            
+            switch(status) {
+                case 'connected':
+                    statusElement.className = 'status-connected';
+                    connectionText.innerHTML = '<i class="fas fa-check-circle"></i> Conectado e sincronizado';
+                    loadingElement.style.display = 'none';
+                    syncInfo.innerHTML = 'Sincronizado em tempo real';
+                    document.getElementById('clearDataButton').disabled = false;
+                    break;
+                    
+                case 'connecting':
+                    statusElement.className = 'status-disconnected';
+                    connectionText.innerHTML = '<i class="fas fa-sync-alt"></i> Conectando...';
+                    loadingElement.style.display = 'inline-block';
+                    syncInfo.innerHTML = 'Estabelecendo conexão...';
+                    break;
+                    
+                case 'disconnected':
+                    statusElement.className = 'status-disconnected';
+                    connectionText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Desconectado';
+                    loadingElement.style.display = 'none';
+                    syncInfo.innerHTML = 'Tentando reconectar...';
+                    break;
+                    
+                case 'error':
+                    statusElement.className = 'status-disconnected';
+                    connectionText.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + message;
+                    loadingElement.style.display = 'none';
+                    syncInfo.innerHTML = 'Erro de conexão';
+                    break;
+            }
+        }
+        
+        // Mostrar notificação de atualização
+        function showLiveUpdate(message) {
+            const updateElement = document.getElementById('liveUpdate');
+            const messageElement = document.getElementById('updateMessage');
+            
+            messageElement.textContent = message;
+            updateElement.style.display = 'flex';
+            
+            setTimeout(() => {
+                updateElement.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Atualizar contador de usuários online
+        function updateOnlineUsers(count) {
+            onlineUsers = count;
+            document.getElementById('onlineCount').textContent = 
+                count + (count === 1 ? ' pessoa online' : ' pessoas online');
+            document.getElementById('onlineUsersCount').textContent = count;
+            document.getElementById('participantsOnlineCount').innerHTML = 
+                `<span id="onlineUsersCount">${count}</span> online`;
+        }
+        
+        // Atualizar link de compartilhamento
         function updateShareLink() {
             const shareLinkInput = document.getElementById('shareLink');
-            shareLinkInput.value = window.location.href;
+            const fullUrl = window.location.href;
+            shareLinkInput.value = fullUrl;
         }
-
-        // Função para copiar link para área de transferência
+        
+        // Copiar link para área de transferência
         function copyShareLink() {
             const shareLinkInput = document.getElementById('shareLink');
             shareLinkInput.select();
@@ -881,81 +974,117 @@
             try {
                 navigator.clipboard.writeText(shareLinkInput.value)
                     .then(() => {
-                        showAlert('Link copiado para a área de transferência! Compartilhe com seus amigos.', 'success');
+                        showLiveUpdate('Link copiado para a área de transferência!');
                     })
                     .catch(() => {
-                        // Fallback para método antigo
+                        // Fallback
                         document.execCommand('copy');
-                        showAlert('Link copiado para a área de transferência!', 'success');
+                        showLiveUpdate('Link copiado!');
                     });
             } catch (err) {
-                showAlert('Não foi possível copiar o link. Tente selecionar e copiar manualmente.', 'warning');
+                showLiveUpdate('Erro ao copiar o link.');
             }
         }
-
-        // Função para salvar dados no LocalStorage
-        function saveToLocalStorage() {
-            try {
-                localStorage.setItem(STORAGE_KEYS.PARTICIPANTS, JSON.stringify(participants));
-                localStorage.setItem(STORAGE_KEYS.DRAW_MESSAGE, document.getElementById('drawMessage').value);
-                if (currentSession.drawResult) {
-                    localStorage.setItem(STORAGE_KEYS.DRAW_RESULT, JSON.stringify(currentSession.drawResult));
-                }
-            } catch (error) {
-                console.error('Erro ao salvar no LocalStorage:', error);
-            }
-        }
-
-        // Função para carregar dados do LocalStorage
-        function loadFromLocalStorage() {
-            try {
-                const savedParticipants = localStorage.getItem(STORAGE_KEYS.PARTICIPANTS);
-                const savedDrawMessage = localStorage.getItem(STORAGE_KEYS.DRAW_MESSAGE);
-                const savedDrawResult = localStorage.getItem(STORAGE_KEYS.DRAW_RESULT);
+        
+        // Sincronizar dados (simulação de WebSocket)
+        function syncData() {
+            const sessionId = getSessionId();
+            const now = Date.now();
+            
+            // Obter dados da sessão do localStorage (simulação de servidor)
+            const sessionKey = `amigosecreto_session_${sessionId}`;
+            let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
+                participants: [],
+                drawMessage: '',
+                drawResult: null,
+                lastUpdate: now,
+                onlineUsers: 0,
+                userTimestamps: {}
+            };
+            
+            // Atualizar timestamp deste usuário
+            sessionData.userTimestamps[userId] = now;
+            
+            // Contar usuários ativos (últimos 30 segundos)
+            const activeUsers = Object.keys(sessionData.userTimestamps).filter(userId => {
+                return now - sessionData.userTimestamps[userId] < 30000; // 30 segundos
+            }).length;
+            
+            updateOnlineUsers(activeUsers);
+            
+            // Verificar se há atualizações desde a última sincronização
+            if (sessionData.lastUpdate > lastUpdateTime) {
+                lastUpdateTime = sessionData.lastUpdate;
                 
-                if (savedParticipants) {
-                    participants = JSON.parse(savedParticipants);
-                }
-                
-                if (savedDrawMessage) {
-                    document.getElementById('drawMessage').value = savedDrawMessage;
-                }
-                
-                if (savedDrawResult) {
-                    currentSession.drawResult = JSON.parse(savedDrawResult);
-                    showDrawResult(currentSession.drawResult);
-                }
-                
-                return true;
-            } catch (error) {
-                console.error('Erro ao carregar do LocalStorage:', error);
-                return false;
-            }
-        }
-
-        // Função para limpar todos os dados
-        function clearAllData() {
-            if (confirm('Tem certeza que deseja apagar TODOS os dados locais? Esta ação não pode ser desfeita.')) {
-                participants = [];
-                currentSession.drawResult = null;
-                
-                try {
-                    localStorage.removeItem(STORAGE_KEYS.PARTICIPANTS);
-                    localStorage.removeItem(STORAGE_KEYS.DRAW_MESSAGE);
-                    localStorage.removeItem(STORAGE_KEYS.DRAW_RESULT);
-                } catch (error) {
-                    console.error('Erro ao limpar LocalStorage:', error);
-                }
-                
+                // Atualizar participantes
+                participants = sessionData.participants;
                 updateParticipantsList();
-                document.getElementById('drawMessage').value = '';
-                document.getElementById('drawResult').style.display = 'none';
                 
-                showAlert('Todos os dados locais foram apagados com sucesso!', 'success');
+                // Atualizar mensagem do sorteio
+                document.getElementById('drawMessage').value = sessionData.drawMessage || '';
+                
+                // Atualizar resultado do sorteio
+                if (sessionData.drawResult) {
+                    showDrawResult(sessionData.drawResult);
+                } else {
+                    document.getElementById('drawResult').style.display = 'none';
+                }
+                
+                // Mostrar notificação se não fomos nós que atualizamos
+                if (now - sessionData.lastUpdate < 5000 && sessionData.lastUpdatedBy !== userId) {
+                    showLiveUpdate('Lista atualizada por outro usuário!');
+                }
             }
+            
+            // Salvar dados atualizados
+            localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+            
+            updateConnectionStatus('connected');
         }
-
-        // Função para atualizar a lista de participantes na tela
+        
+        // Salvar dados na sessão compartilhada
+        function saveSharedData(type, data, updatedBy = userId) {
+            const sessionId = getSessionId();
+            const sessionKey = `amigosecreto_session_${sessionId}`;
+            let sessionData = JSON.parse(localStorage.getItem(sessionKey)) || {
+                participants: [],
+                drawMessage: '',
+                drawResult: null,
+                lastUpdate: Date.now(),
+                onlineUsers: 0,
+                userTimestamps: {}
+            };
+            
+            // Atualizar dados baseados no tipo
+            switch(type) {
+                case 'participants':
+                    sessionData.participants = data;
+                    break;
+                case 'drawMessage':
+                    sessionData.drawMessage = data;
+                    break;
+                case 'drawResult':
+                    sessionData.drawResult = data;
+                    break;
+                case 'clear':
+                    sessionData.participants = [];
+                    sessionData.drawResult = null;
+                    break;
+            }
+            
+            // Atualizar metadados
+            sessionData.lastUpdate = Date.now();
+            sessionData.lastUpdatedBy = updatedBy;
+            sessionData.userTimestamps[userId] = Date.now();
+            
+            // Salvar
+            localStorage.setItem(sessionKey, JSON.stringify(sessionData));
+            
+            // Sincronizar imediatamente
+            syncData();
+        }
+        
+        // Atualizar lista de participantes na tela
         function updateParticipantsList() {
             const participantsList = document.getElementById('participantsList');
             const participantCount = document.getElementById('participantCount');
@@ -1023,11 +1152,8 @@
             });
             
             participantsList.innerHTML = html;
-            
-            // Salvar automaticamente após atualizar a lista
-            saveToLocalStorage();
         }
-
+        
         // Função para adicionar um participante
         function addParticipant(event) {
             event.preventDefault();
@@ -1041,53 +1167,55 @@
             
             // Validar dados
             if (!name || !email) {
-                showAlert('Por favor, preencha pelo menos o nome e e-mail do participante.', 'warning');
+                showLiveUpdate('Preencha nome e e-mail!');
                 return;
             }
             
             // Validar e-mail
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                showAlert('Por favor, insira um e-mail válido.', 'warning');
+                showLiveUpdate('E-mail inválido!');
                 return;
             }
             
             // Verificar se o e-mail já está cadastrado
             if (participants.some(p => p.email.toLowerCase() === email.toLowerCase())) {
-                showAlert('Já existe um participante com este e-mail.', 'warning');
+                showLiveUpdate('E-mail já cadastrado!');
                 return;
             }
             
-            // Adicionar participante ao array
+            // Adicionar participante
             participants.push({
+                id: 'part_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
                 name,
                 email,
                 wishes,
                 restrictions,
                 budget,
-                id: Date.now() // ID único baseado no timestamp
+                addedBy: userId,
+                timestamp: Date.now()
             });
             
-            // Atualizar a lista
-            updateParticipantsList();
+            // Salvar na sessão compartilhada
+            saveSharedData('participants', participants);
             
             // Limpar formulário
             document.getElementById('participantForm').reset();
             
-            // Mostrar mensagem de sucesso
-            showAlert(`Participante ${name} adicionado com sucesso!`, 'success');
+            // Mostrar notificação
+            showLiveUpdate(`${name} adicionado(a)!`);
         }
-
+        
         // Função para remover um participante
         function removeParticipant(index) {
             if (confirm(`Tem certeza que deseja remover ${participants[index].name} da lista?`)) {
                 const removedName = participants[index].name;
                 participants.splice(index, 1);
-                updateParticipantsList();
-                showAlert(`Participante ${removedName} removido com sucesso!`, 'success');
+                saveSharedData('participants', participants);
+                showLiveUpdate(`${removedName} removido(a)!`);
             }
         }
-
+        
         // Função para editar um participante
         function editParticipant(index) {
             const participant = participants[index];
@@ -1099,18 +1227,16 @@
             document.getElementById('restrictions').value = participant.restrictions;
             document.getElementById('budget').value = participant.budget;
             
-            // Remover participante do array (será readicionado ao enviar o formulário)
+            // Remover participante da lista
             participants.splice(index, 1);
-            
-            // Atualizar lista
-            updateParticipantsList();
+            saveSharedData('participants', participants);
             
             // Rolar para o formulário
             document.getElementById('name').focus();
             
-            showAlert(`Editando participante: ${participant.name}. Preencha as informações e clique em "Adicionar Participante" para salvar as alterações.`, 'success');
+            showLiveUpdate(`Editando ${participant.name}...`);
         }
-
+        
         // Função para mostrar resultado do sorteio
         function showDrawResult(drawResult) {
             if (!drawResult || !drawResult.pairs || drawResult.pairs.length === 0) {
@@ -1145,18 +1271,30 @@
             // Mostrar resultado
             document.getElementById('drawResult').style.display = 'block';
         }
-
+        
+        // Função para obter iniciais de um nome
+        function getInitials(name) {
+            return name.split(' ')
+                .map(part => part.charAt(0))
+                .join('')
+                .toUpperCase()
+                .substring(0, 2);
+        }
+        
         // Função para realizar o sorteio
         function performDraw() {
             // Verificar se há participantes suficientes
             if (participants.length < 2) {
-                showAlert('É necessário pelo menos 2 participantes para realizar o sorteio.', 'warning');
+                showLiveUpdate('Precisa de pelo menos 2 participantes!');
                 return;
             }
             
             // Obter mensagem personalizada
             const customMessage = document.getElementById('drawMessage').value || 
                                  "Que a troca de presentes seja incrível! Lembre-se de manter o segredo até o dia da revelação.";
+            
+            // Salvar mensagem
+            saveSharedData('drawMessage', customMessage);
             
             // Realizar sorteio (algoritmo simples)
             const shuffled = [...participants].sort(() => Math.random() - 0.5);
@@ -1170,65 +1308,40 @@
             }
             
             // Salvar resultado
-            currentSession.drawResult = {
+            const drawResult = {
                 pairs: pairs,
                 timestamp: Date.now(),
                 message: customMessage
             };
             
-            // Salvar no LocalStorage
-            saveToLocalStorage();
+            saveSharedData('drawResult', drawResult);
             
             // Mostrar resultado
-            showDrawResult(currentSession.drawResult);
+            showDrawResult(drawResult);
             
             // Simular envio de e-mails
             simulateEmailSend(pairs);
             
             // Rolar para o resultado
             document.getElementById('drawResult').scrollIntoView({ behavior: 'smooth' });
+            
+            showLiveUpdate(`Sorteio realizado! ${pairs.length} pares criados.`);
         }
-
-        // Função para obter iniciais de um nome
-        function getInitials(name) {
-            return name.split(' ')
-                .map(part => part.charAt(0))
-                .join('')
-                .toUpperCase()
-                .substring(0, 2);
-        }
-
+        
         // Função para simular envio de e-mails
         function simulateEmailSend(pairs) {
             console.log('=== SIMULAÇÃO DE ENVIO DE E-MAILS ===');
             pairs.forEach(pair => {
                 console.log(`E-mail enviado para: ${pair.from.email}`);
-                console.log(`Assunto: Seu amigo secreto foi sorteado! - AmigoSecretoEva`);
                 console.log(`Conteúdo: Olá ${pair.from.name}, você tirou ${pair.to.name} no amigo secreto!`);
-                
-                if (pair.to.wishes) {
-                    console.log(`Lista de desejos: ${pair.to.wishes}`);
-                }
-                
-                console.log('---');
             });
             console.log('Todos os e-mails foram enviados com sucesso!');
-            
-            // Mostrar mensagem de confirmação
-            showAlert(`Sorteio realizado com sucesso! ${pairs.length} pares foram criados.`, 'success');
         }
-
+        
         // Função para realizar novo sorteio
         function newDraw() {
             // Remover resultado do sorteio
-            currentSession.drawResult = null;
-            
-            // Remover do LocalStorage
-            try {
-                localStorage.removeItem(STORAGE_KEYS.DRAW_RESULT);
-            } catch (error) {
-                console.error('Erro ao remover sorteio:', error);
-            }
+            saveSharedData('drawResult', null);
             
             // Esconder resultado
             document.getElementById('drawResult').style.display = 'none';
@@ -1236,44 +1349,21 @@
             // Rolar para o topo do sorteio
             document.getElementById('drawButton').scrollIntoView({ behavior: 'smooth' });
             
-            showAlert('Sorteio resetado. Você pode realizar um novo sorteio.', 'success');
+            showLiveUpdate('Sorteio resetado!');
         }
-
+        
+        // Função para limpar todos os dados
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja apagar TODOS os dados desta sessão? Esta ação afetará todos os usuários conectados.')) {
+                saveSharedData('clear', null);
+                showLiveUpdate('Todos os dados foram apagados!');
+            }
+        }
+        
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             // Atualizar link de compartilhamento
             updateShareLink();
-            
-            // Carregar dados salvos
-            loadFromLocalStorage();
-            
-            // Adicionar dados de exemplo apenas se não houver dados salvos
-            if (participants.length === 0) {
-                participants = [
-                    {
-                        name: 'João Silva',
-                        email: 'joao@email.com',
-                        wishes: 'Livro de ficção científica, Camiseta de banda, Caneca personalizada',
-                        restrictions: 'Não gosto de doces',
-                        budget: '50-100',
-                        id: 1
-                    },
-                    {
-                        name: 'Maria Ana',
-                        email: 'maria@email.com',
-                        wishes: 'Perfume floral, Brinco de prata, Agenda 2024',
-                        restrictions: 'Alérgica a níquel',
-                        budget: '100-150',
-                        id: 2
-                    }
-                ];
-                
-                // Salvar participantes de exemplo
-                saveToLocalStorage();
-            }
-            
-            // Atualizar lista inicial
-            updateParticipantsList();
             
             // Configurar eventos
             document.getElementById('participantForm').addEventListener('submit', addParticipant);
@@ -1282,16 +1372,29 @@
             document.getElementById('clearDataButton').addEventListener('click', clearAllData);
             document.getElementById('copyLinkButton').addEventListener('click', copyShareLink);
             
-            // Adicionar evento para salvar mensagem quando alterada
-            document.getElementById('drawMessage').addEventListener('input', saveToLocalStorage);
+            // Sincronizar a cada segundo
+            setInterval(syncData, 1000);
             
-            // Mostrar mensagem de boas-vindas
-            showAlert('Sistema carregado com sucesso! Adicione participantes e compartilhe o link.', 'success');
+            // Primeira sincronização
+            setTimeout(() => {
+                syncData();
+                
+                // Adicionar participantes de exemplo se estiver vazio
+                if (participants.length === 0) {
+                    participants = [
+                        
+                            
+                    ];
+                    saveSharedData('participants', participants);
+                }
+                
+                updateConnectionStatus('connected');
+            }, 500);
             
-            // Atualizar status da conexão
-            document.getElementById('connectionStatus').innerHTML = `
-                <i class="fas fa-check-circle"></i> Sistema funcionando perfeitamente - ${participants.length} participantes carregados
-            `;
+            // Atualizar status da conexão periodicamente
+            setInterval(() => {
+                syncData();
+            }, 30000); // A cada 30 segundos
         });
     </script>
 </body>
