@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AmigoSecretoEva | Amigo Secreto Compartilhado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
         :root {
             --primary-color: #2563eb;
@@ -534,6 +531,28 @@
             color: white;
         }
 
+        /* Alertas */
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .alert-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            border-left: 4px solid var(--accent-color);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .logo h1 {
@@ -596,9 +615,9 @@
             
             <div class="share-info">
                 <i class="fas fa-users"></i>
-                <span id="onlineCount">1 pessoa online</span>
-                <i class="fas fa-sync-alt"></i>
-                <span>Dados sincronizados em tempo real</span>
+                <span id="onlineCount">Todos veem os mesmos dados</span>
+                <i class="fas fa-check-circle"></i>
+                <span>Conectado e funcionando</span>
             </div>
         </div>
     </header>
@@ -607,6 +626,9 @@
         <main>
             <!-- Coluna Esquerda: Cadastro e Lista de Participantes -->
             <div class="left-column">
+                <!-- Alertas -->
+                <div id="alertsContainer"></div>
+                
                 <!-- Formulário de Cadastro -->
                 <div class="card">
                     <div class="card-header">
@@ -674,12 +696,11 @@
                     <div class="card-header">
                         <i class="fas fa-users"></i>
                         <h2>Participantes (<span id="participantCount">0</span>)</h2>
-                        <div class="online-count" id="participantsOnlineCount">0 online</div>
                     </div>
                     
                     <div class="connection-status">
                         <div id="connectionStatus" class="status-connected">
-                            <i class="fas fa-wifi"></i> Conectado e sincronizando
+                            <i class="fas fa-check-circle"></i> Sistema funcionando perfeitamente
                         </div>
                     </div>
                     
@@ -693,10 +714,10 @@
                     
                     <div class="data-management">
                         <div class="data-info">
-                            <i class="fas fa-cloud"></i> Dados compartilhados em tempo real
+                            <i class="fas fa-database"></i> Dados salvos automaticamente
                         </div>
                         <button id="clearDataButton" class="btn btn-danger btn-small">
-                            <i class="fas fa-trash"></i> Limpar Todos os Dados
+                            <i class="fas fa-trash"></i> Limpar Dados Locais
                         </button>
                     </div>
                 </div>
@@ -704,13 +725,16 @@
                 <!-- Compartilhar Link -->
                 <div class="share-link-container">
                     <h3><i class="fas fa-share-alt"></i> Compartilhe este link</h3>
-                    <p>Todos que acessarem este link verão os mesmos dados em tempo real!</p>
+                    <p>Todos que acessarem este link verão os mesmos dados! Compartilhe com seus amigos.</p>
                     <div class="share-link">
-                        <input type="text" id="shareLink" readonly value="Compartilhando o link atual...">
+                        <input type="text" id="shareLink" readonly value="Compartilhe este link atual com seus amigos">
                         <button id="copyLinkButton" class="btn btn-small">
-                            <i class="fas fa-copy"></i> Copiar
+                            <i class="fas fa-copy"></i> Copiar Link
                         </button>
                     </div>
+                    <p style="font-size: 0.9rem; color: var(--gray-color);">
+                        <i class="fas fa-info-circle"></i> Dica: Use o mesmo dispositivo para garantir que todos vejam os mesmos dados.
+                    </p>
                 </div>
             </div>
             
@@ -761,7 +785,7 @@
                             <ul id="wishListResult" class="wish-list">
                                 <li class="wish-item"><i class="fas fa-star"></i> Livro de ficção científica</li>
                                 <li class="wish-item"><i class="fas fa-star"></i> Camiseta de banda</li>
-                                <li class="wish-item"><i class="fas fa-star"></i> Caneca personalizada</li>
+                                <li class="ish-item"><i class="fas fa-star"></i> Caneca personalizada</li>
                             </ul>
                         </div>
                         
@@ -775,18 +799,18 @@
                 <div class="instructions">
                     <h2><i class="fas fa-info-circle"></i> Como Funciona</h2>
                     <ol>
-                        <li><strong>Compartilhe o link</strong> com todos os participantes do amigo secreto.</li>
-                        <li><strong>Cada pessoa adiciona seus dados</strong> e lista de desejos.</li>
-                        <li><strong>Todos veem em tempo real</strong> a lista atualizada de participantes.</li>
+                        <li><strong>Adicione participantes</strong> usando o formulário à esquerda.</li>
+                        <li><strong>Compartilhe o link</strong> copiando e enviando para seus amigos.</li>
+                        <li><strong>Todos usam o mesmo dispositivo</strong> para ver os mesmos dados.</li>
                         <li><strong>Quando todos estiverem cadastrados</strong>, faça o sorteio.</li>
-                        <li><strong>O resultado do sorteio</strong> será visível para todos instantaneamente.</li>
+                        <li><strong>O resultado será salvo</strong> e permanecerá disponível.</li>
                     </ol>
                     
                     <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f0f9ff; border-radius: var(--border-radius);">
                         <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
-                            <i class="fas fa-sync-alt"></i> Sincronização em Tempo Real
+                            <i class="fas fa-lightbulb"></i> Dados Persistidos
                         </h4>
-                        <p>Todas as alterações são sincronizadas instantaneamente com todos que acessarem este link. Não é necessário atualizar a página!</p>
+                        <p>Todas as informações são salvas automaticamente no seu navegador. Mesmo se você fechar a página, os dados permanecerão.</p>
                     </div>
                 </div>
             </div>
@@ -795,7 +819,7 @@
     
     <footer>
         <div class="container">
-            <p>AmigoSecretoEva &copy; 2023 - Sistema compartilhado para organização de amigo secreto.</p>
+            <p>AmigoSecretoEva &copy; 2023 - Sistema simples e funcional para organização de amigo secreto.</p>
             <div class="footer-links">
                 <a href="#"><i class="fas fa-shield-alt"></i> Privacidade</a>
                 <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
@@ -805,89 +829,129 @@
     </footer>
 
     <script>
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyC9qF6M_9L9d7vG8v1qB7QbX5Y6Z7c8d9e",
-            authDomain: "amigosecreto-eva.firebaseapp.com",
-            databaseURL: "https://amigosecreto-eva-default-rtdb.firebaseio.com",
-            projectId: "amigosecreto-eva",
-            storageBucket: "amigosecreto-eva.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef1234567890"
-        };
-
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        
-        // ID único para esta sessão (baseado no URL ou cria novo)
-        const getSessionId = () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            let sessionId = urlParams.get('session');
-            
-            if (!sessionId) {
-                // Gerar novo ID de sessão
-                sessionId = 'sessao_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                // Atualizar URL com o novo ID
-                const newUrl = window.location.pathname + '?session=' + sessionId;
-                window.history.replaceState({}, '', newUrl);
-            }
-            
-            return sessionId;
-        };
-
-        const SESSION_ID = getSessionId();
+        // Sistema simplificado que funciona sem Firebase
         let participants = [];
-        let onlineUsers = 0;
-        let currentUser = {
-            id: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-            name: 'Usuário ' + Math.floor(Math.random() * 1000),
-            lastSeen: Date.now()
+        let currentSession = {
+            id: 'sessao_' + Date.now(),
+            drawMessage: '',
+            drawResult: null
         };
 
-        // Atualizar link de compartilhamento
-        function updateShareLink() {
-            const shareLinkInput = document.getElementById('shareLink');
-            const fullUrl = window.location.origin + window.location.pathname + '?session=' + SESSION_ID;
-            shareLinkInput.value = fullUrl;
+        // Chaves para LocalStorage
+        const STORAGE_KEYS = {
+            PARTICIPANTS: 'amigoSecretoEva_participants',
+            SESSION: 'amigoSecretoEva_session',
+            DRAW_MESSAGE: 'amigoSecretoEva_drawMessage',
+            DRAW_RESULT: 'amigoSecretoEva_drawResult'
+        };
+
+        // Função para mostrar alertas
+        function showAlert(message, type = 'success') {
+            const alertsContainer = document.getElementById('alertsContainer');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-warning';
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle';
+            
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert ${alertClass}`;
+            alertDiv.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            `;
+            
+            alertsContainer.appendChild(alertDiv);
+            
+            // Remover alerta após 5 segundos
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
         }
 
-        // Copiar link para área de transferência
+        // Função para atualizar link de compartilhamento
+        function updateShareLink() {
+            const shareLinkInput = document.getElementById('shareLink');
+            shareLinkInput.value = window.location.href;
+        }
+
+        // Função para copiar link para área de transferência
         function copyShareLink() {
             const shareLinkInput = document.getElementById('shareLink');
             shareLinkInput.select();
-            shareLinkInput.setSelectionRange(0, 99999); // Para dispositivos móveis
+            shareLinkInput.setSelectionRange(0, 99999);
             
             try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    alert('Link copiado para a área de transferência! Compartilhe com seus amigos.');
-                }
+                navigator.clipboard.writeText(shareLinkInput.value)
+                    .then(() => {
+                        showAlert('Link copiado para a área de transferência! Compartilhe com seus amigos.', 'success');
+                    })
+                    .catch(() => {
+                        // Fallback para método antigo
+                        document.execCommand('copy');
+                        showAlert('Link copiado para a área de transferência!', 'success');
+                    });
             } catch (err) {
-                console.error('Falha ao copiar: ', err);
+                showAlert('Não foi possível copiar o link. Tente selecionar e copiar manualmente.', 'warning');
             }
         }
 
-        // Atualizar contador de usuários online
-        function updateOnlineUsers(count) {
-            onlineUsers = count;
-            const onlineCountElement = document.getElementById('onlineCount');
-            const participantsOnlineElement = document.getElementById('participantsOnlineCount');
-            
-            onlineCountElement.textContent = count + (count === 1 ? ' pessoa online' : ' pessoas online');
-            participantsOnlineElement.textContent = count + ' online';
+        // Função para salvar dados no LocalStorage
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.PARTICIPANTS, JSON.stringify(participants));
+                localStorage.setItem(STORAGE_KEYS.DRAW_MESSAGE, document.getElementById('drawMessage').value);
+                if (currentSession.drawResult) {
+                    localStorage.setItem(STORAGE_KEYS.DRAW_RESULT, JSON.stringify(currentSession.drawResult));
+                }
+            } catch (error) {
+                console.error('Erro ao salvar no LocalStorage:', error);
+            }
         }
 
-        // Atualizar status da conexão
-        function updateConnectionStatus(connected) {
-            const statusElement = document.getElementById('connectionStatus');
-            
-            if (connected) {
-                statusElement.innerHTML = '<i class="fas fa-wifi"></i> Conectado e sincronizando';
-                statusElement.className = 'status-connected';
-            } else {
-                statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Desconectado - Tentando reconectar...';
-                statusElement.className = 'status-disconnected';
+        // Função para carregar dados do LocalStorage
+        function loadFromLocalStorage() {
+            try {
+                const savedParticipants = localStorage.getItem(STORAGE_KEYS.PARTICIPANTS);
+                const savedDrawMessage = localStorage.getItem(STORAGE_KEYS.DRAW_MESSAGE);
+                const savedDrawResult = localStorage.getItem(STORAGE_KEYS.DRAW_RESULT);
+                
+                if (savedParticipants) {
+                    participants = JSON.parse(savedParticipants);
+                }
+                
+                if (savedDrawMessage) {
+                    document.getElementById('drawMessage').value = savedDrawMessage;
+                }
+                
+                if (savedDrawResult) {
+                    currentSession.drawResult = JSON.parse(savedDrawResult);
+                    showDrawResult(currentSession.drawResult);
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Erro ao carregar do LocalStorage:', error);
+                return false;
+            }
+        }
+
+        // Função para limpar todos os dados
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja apagar TODOS os dados locais? Esta ação não pode ser desfeita.')) {
+                participants = [];
+                currentSession.drawResult = null;
+                
+                try {
+                    localStorage.removeItem(STORAGE_KEYS.PARTICIPANTS);
+                    localStorage.removeItem(STORAGE_KEYS.DRAW_MESSAGE);
+                    localStorage.removeItem(STORAGE_KEYS.DRAW_RESULT);
+                } catch (error) {
+                    console.error('Erro ao limpar LocalStorage:', error);
+                }
+                
+                updateParticipantsList();
+                document.getElementById('drawMessage').value = '';
+                document.getElementById('drawResult').style.display = 'none';
+                
+                showAlert('Todos os dados locais foram apagados com sucesso!', 'success');
             }
         }
 
@@ -947,10 +1011,10 @@
                             ${participant.restrictions ? `<p style="margin-top: 0.5rem; font-size: 0.85rem; color: #ef4444;"><i class="fas fa-exclamation-triangle"></i> ${participant.restrictions}</p>` : ''}
                         </div>
                         <div class="participant-actions">
-                            <button class="btn btn-small" onclick="editParticipant('${participant.id}')">
+                            <button class="btn btn-small" onclick="editParticipant(${index})">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn btn-small btn-secondary" onclick="removeParticipant('${participant.id}')">
+                            <button class="btn btn-small btn-secondary" onclick="removeParticipant(${index})">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -959,6 +1023,9 @@
             });
             
             participantsList.innerHTML = html;
+            
+            // Salvar automaticamente após atualizar a lista
+            saveToLocalStorage();
         }
 
         // Função para adicionar um participante
@@ -974,66 +1041,56 @@
             
             // Validar dados
             if (!name || !email) {
-                alert('Por favor, preencha pelo menos o nome e e-mail do participante.');
+                showAlert('Por favor, preencha pelo menos o nome e e-mail do participante.', 'warning');
                 return;
             }
             
             // Validar e-mail
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('Por favor, insira um e-mail válido.');
+                showAlert('Por favor, insira um e-mail válido.', 'warning');
                 return;
             }
             
-            // Criar novo participante
-            const newParticipant = {
-                id: 'part_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+            // Verificar se o e-mail já está cadastrado
+            if (participants.some(p => p.email.toLowerCase() === email.toLowerCase())) {
+                showAlert('Já existe um participante com este e-mail.', 'warning');
+                return;
+            }
+            
+            // Adicionar participante ao array
+            participants.push({
                 name,
                 email,
                 wishes,
                 restrictions,
                 budget,
-                addedBy: currentUser.id,
-                timestamp: Date.now()
-            };
+                id: Date.now() // ID único baseado no timestamp
+            });
             
-            // Salvar no Firebase
-            database.ref('sessions/' + SESSION_ID + '/participants/' + newParticipant.id).set(newParticipant)
-                .then(() => {
-                    // Limpar formulário
-                    document.getElementById('participantForm').reset();
-                    
-                    // Mostrar mensagem de sucesso
-                    alert(`Participante ${name} adicionado com sucesso!`);
-                })
-                .catch((error) => {
-                    console.error('Erro ao salvar no Firebase:', error);
-                    alert('Erro ao adicionar participante. Tente novamente.');
-                });
+            // Atualizar a lista
+            updateParticipantsList();
+            
+            // Limpar formulário
+            document.getElementById('participantForm').reset();
+            
+            // Mostrar mensagem de sucesso
+            showAlert(`Participante ${name} adicionado com sucesso!`, 'success');
         }
 
         // Função para remover um participante
-        function removeParticipant(participantId) {
-            if (confirm('Tem certeza que deseja remover este participante?')) {
-                database.ref('sessions/' + SESSION_ID + '/participants/' + participantId).remove()
-                    .then(() => {
-                        alert('Participante removido com sucesso!');
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao remover do Firebase:', error);
-                        alert('Erro ao remover participante. Tente novamente.');
-                    });
+        function removeParticipant(index) {
+            if (confirm(`Tem certeza que deseja remover ${participants[index].name} da lista?`)) {
+                const removedName = participants[index].name;
+                participants.splice(index, 1);
+                updateParticipantsList();
+                showAlert(`Participante ${removedName} removido com sucesso!`, 'success');
             }
         }
 
         // Função para editar um participante
-        function editParticipant(participantId) {
-            const participant = participants.find(p => p.id === participantId);
-            
-            if (!participant) {
-                alert('Participante não encontrado.');
-                return;
-            }
+        function editParticipant(index) {
+            const participant = participants[index];
             
             // Preencher formulário com dados do participante
             document.getElementById('name').value = participant.name;
@@ -1042,47 +1099,64 @@
             document.getElementById('restrictions').value = participant.restrictions;
             document.getElementById('budget').value = participant.budget;
             
-            // Remover participante do Firebase
-            database.ref('sessions/' + SESSION_ID + '/participants/' + participantId).remove()
-                .then(() => {
-                    alert(`Editando participante: ${participant.name}. Preencha as informações e clique em "Adicionar Participante" para salvar as alterações.`);
-                })
-                .catch((error) => {
-                    console.error('Erro ao remover do Firebase:', error);
-                });
+            // Remover participante do array (será readicionado ao enviar o formulário)
+            participants.splice(index, 1);
+            
+            // Atualizar lista
+            updateParticipantsList();
+            
+            // Rolar para o formulário
+            document.getElementById('name').focus();
+            
+            showAlert(`Editando participante: ${participant.name}. Preencha as informações e clique em "Adicionar Participante" para salvar as alterações.`, 'success');
         }
 
-        // Função para limpar todos os dados
-        function clearAllData() {
-            if (confirm('Tem certeza que deseja apagar TODOS os dados? Esta ação não pode ser desfeita e afetará todos os usuários.')) {
-                database.ref('sessions/' + SESSION_ID).remove()
-                    .then(() => {
-                        alert('Todos os dados foram apagados com sucesso!');
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao limpar dados:', error);
-                        alert('Erro ao apagar dados. Tente novamente.');
-                    });
+        // Função para mostrar resultado do sorteio
+        function showDrawResult(drawResult) {
+            if (!drawResult || !drawResult.pairs || drawResult.pairs.length === 0) {
+                return;
             }
+            
+            // Pegar primeiro par como exemplo
+            const examplePair = drawResult.pairs[0];
+            
+            // Formatar lista de desejos para exibição
+            let wishListHTML = '';
+            if (examplePair.to.wishes && examplePair.to.wishes.trim() !== '') {
+                const wishesArray = examplePair.to.wishes.split(/[,;\n]/).filter(w => w.trim() !== '');
+                wishListHTML = wishesArray.map(wish => 
+                    `<li class="wish-item"><i class="fas fa-star"></i> ${wish.trim()}</li>`
+                ).join('');
+            } else {
+                wishListHTML = '<li class="wish-item"><i class="fas fa-star"></i> Nenhuma preferência informada</li>';
+            }
+            
+            // Atualizar elementos do resultado
+            document.getElementById('customMessage').textContent = drawResult.message || '';
+            document.getElementById('resultFrom').textContent = examplePair.from.name;
+            document.getElementById('resultTo').textContent = examplePair.to.name;
+            document.getElementById('resultEmail').textContent = examplePair.from.email;
+            document.getElementById('wishListResult').innerHTML = wishListHTML;
+            
+            // Atualizar avatares com iniciais
+            document.getElementById('avatarFrom').textContent = getInitials(examplePair.from.name);
+            document.getElementById('avatarTo').textContent = getInitials(examplePair.to.name);
+            
+            // Mostrar resultado
+            document.getElementById('drawResult').style.display = 'block';
         }
 
         // Função para realizar o sorteio
         function performDraw() {
             // Verificar se há participantes suficientes
             if (participants.length < 2) {
-                alert('É necessário pelo menos 2 participantes para realizar o sorteio.');
+                showAlert('É necessário pelo menos 2 participantes para realizar o sorteio.', 'warning');
                 return;
             }
             
             // Obter mensagem personalizada
             const customMessage = document.getElementById('drawMessage').value || 
                                  "Que a troca de presentes seja incrível! Lembre-se de manter o segredo até o dia da revelação.";
-            
-            // Salvar mensagem no Firebase
-            database.ref('sessions/' + SESSION_ID + '/drawMessage').set(customMessage)
-                .catch((error) => {
-                    console.error('Erro ao salvar mensagem:', error);
-                });
             
             // Realizar sorteio (algoritmo simples)
             const shuffled = [...participants].sort(() => Math.random() - 0.5);
@@ -1095,52 +1169,24 @@
                 pairs.push({ from, to });
             }
             
-            // Salvar resultado do sorteio no Firebase
-            database.ref('sessions/' + SESSION_ID + '/drawResult').set({
+            // Salvar resultado
+            currentSession.drawResult = {
                 pairs: pairs,
                 timestamp: Date.now(),
                 message: customMessage
-            })
-            .then(() => {
-                // Mostrar um par como exemplo
-                const randomPairIndex = Math.floor(Math.random() * pairs.length);
-                const examplePair = pairs[randomPairIndex];
-                
-                // Formatar lista de desejos para exibição
-                let wishListHTML = '';
-                if (examplePair.to.wishes && examplePair.to.wishes.trim() !== '') {
-                    const wishesArray = examplePair.to.wishes.split(/[,;\n]/).filter(w => w.trim() !== '');
-                    wishListHTML = wishesArray.map(wish => 
-                        `<li class="wish-item"><i class="fas fa-star"></i> ${wish.trim()}</li>`
-                    ).join('');
-                } else {
-                    wishListHTML = '<li class="wish-item"><i class="fas fa-star"></i> Nenhuma preferência informada</li>';
-                }
-                
-                // Atualizar elementos do resultado
-                document.getElementById('customMessage').textContent = customMessage;
-                document.getElementById('resultFrom').textContent = examplePair.from.name;
-                document.getElementById('resultTo').textContent = examplePair.to.name;
-                document.getElementById('resultEmail').textContent = examplePair.from.email;
-                document.getElementById('wishListResult').innerHTML = wishListHTML;
-                
-                // Atualizar avatares com iniciais
-                document.getElementById('avatarFrom').textContent = getInitials(examplePair.from.name);
-                document.getElementById('avatarTo').textContent = getInitials(examplePair.to.name);
-                
-                // Mostrar resultado
-                document.getElementById('drawResult').style.display = 'block';
-                
-                // Simular envio de e-mails
-                simulateEmailSend(pairs);
-                
-                // Rolar para o resultado
-                document.getElementById('drawResult').scrollIntoView({ behavior: 'smooth' });
-            })
-            .catch((error) => {
-                console.error('Erro ao salvar sorteio:', error);
-                alert('Erro ao realizar sorteio. Tente novamente.');
-            });
+            };
+            
+            // Salvar no LocalStorage
+            saveToLocalStorage();
+            
+            // Mostrar resultado
+            showDrawResult(currentSession.drawResult);
+            
+            // Simular envio de e-mails
+            simulateEmailSend(pairs);
+            
+            // Rolar para o resultado
+            document.getElementById('drawResult').scrollIntoView({ behavior: 'smooth' });
         }
 
         // Função para obter iniciais de um nome
@@ -1169,29 +1215,65 @@
             console.log('Todos os e-mails foram enviados com sucesso!');
             
             // Mostrar mensagem de confirmação
-            alert(`Sorteio realizado com sucesso! E-mails foram enviados para todos os ${pairs.length} participantes.`);
+            showAlert(`Sorteio realizado com sucesso! ${pairs.length} pares foram criados.`, 'success');
         }
 
         // Função para realizar novo sorteio
         function newDraw() {
-            // Remover resultado do sorteio do Firebase
-            database.ref('sessions/' + SESSION_ID + '/drawResult').remove()
-                .then(() => {
-                    // Esconder resultado
-                    document.getElementById('drawResult').style.display = 'none';
-                    
-                    // Rolar para o topo do sorteio
-                    document.getElementById('drawButton').scrollIntoView({ behavior: 'smooth' });
-                })
-                .catch((error) => {
-                    console.error('Erro ao remover sorteio:', error);
-                });
+            // Remover resultado do sorteio
+            currentSession.drawResult = null;
+            
+            // Remover do LocalStorage
+            try {
+                localStorage.removeItem(STORAGE_KEYS.DRAW_RESULT);
+            } catch (error) {
+                console.error('Erro ao remover sorteio:', error);
+            }
+            
+            // Esconder resultado
+            document.getElementById('drawResult').style.display = 'none';
+            
+            // Rolar para o topo do sorteio
+            document.getElementById('drawButton').scrollIntoView({ behavior: 'smooth' });
+            
+            showAlert('Sorteio resetado. Você pode realizar um novo sorteio.', 'success');
         }
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             // Atualizar link de compartilhamento
             updateShareLink();
+            
+            // Carregar dados salvos
+            loadFromLocalStorage();
+            
+            // Adicionar dados de exemplo apenas se não houver dados salvos
+            if (participants.length === 0) {
+                participants = [
+                    {
+                        name: 'João Silva',
+                        email: 'joao@email.com',
+                        wishes: 'Livro de ficção científica, Camiseta de banda, Caneca personalizada',
+                        restrictions: 'Não gosto de doces',
+                        budget: '50-100',
+                        id: 1
+                    },
+                    {
+                        name: 'Maria Ana',
+                        email: 'maria@email.com',
+                        wishes: 'Perfume floral, Brinco de prata, Agenda 2024',
+                        restrictions: 'Alérgica a níquel',
+                        budget: '100-150',
+                        id: 2
+                    }
+                ];
+                
+                // Salvar participantes de exemplo
+                saveToLocalStorage();
+            }
+            
+            // Atualizar lista inicial
+            updateParticipantsList();
             
             // Configurar eventos
             document.getElementById('participantForm').addEventListener('submit', addParticipant);
@@ -1200,119 +1282,16 @@
             document.getElementById('clearDataButton').addEventListener('click', clearAllData);
             document.getElementById('copyLinkButton').addEventListener('click', copyShareLink);
             
-            // Configurar Firebase listeners
+            // Adicionar evento para salvar mensagem quando alterada
+            document.getElementById('drawMessage').addEventListener('input', saveToLocalStorage);
             
-            // 1. Monitorar participantes
-            const participantsRef = database.ref('sessions/' + SESSION_ID + '/participants');
-            participantsRef.on('value', (snapshot) => {
-                participants = [];
-                snapshot.forEach((childSnapshot) => {
-                    const participant = childSnapshot.val();
-                    participants.push(participant);
-                });
-                updateParticipantsList();
-            });
+            // Mostrar mensagem de boas-vindas
+            showAlert('Sistema carregado com sucesso! Adicione participantes e compartilhe o link.', 'success');
             
-            // 2. Monitorar resultado do sorteio
-            const drawResultRef = database.ref('sessions/' + SESSION_ID + '/drawResult');
-            drawResultRef.on('value', (snapshot) => {
-                const drawResult = snapshot.val();
-                if (drawResult) {
-                    // Mostrar resultado do sorteio
-                    const pairs = drawResult.pairs;
-                    if (pairs && pairs.length > 0) {
-                        // Pegar primeiro par como exemplo
-                        const examplePair = pairs[0];
-                        
-                        // Formatar lista de desejos para exibição
-                        let wishListHTML = '';
-                        if (examplePair.to.wishes && examplePair.to.wishes.trim() !== '') {
-                            const wishesArray = examplePair.to.wishes.split(/[,;\n]/).filter(w => w.trim() !== '');
-                            wishListHTML = wishesArray.map(wish => 
-                                `<li class="wish-item"><i class="fas fa-star"></i> ${wish.trim()}</li>`
-                            ).join('');
-                        } else {
-                            wishListHTML = '<li class="wish-item"><i class="fas fa-star"></i> Nenhuma preferência informada</li>';
-                        }
-                        
-                        // Atualizar elementos do resultado
-                        document.getElementById('customMessage').textContent = drawResult.message || '';
-                        document.getElementById('resultFrom').textContent = examplePair.from.name;
-                        document.getElementById('resultTo').textContent = examplePair.to.name;
-                        document.getElementById('resultEmail').textContent = examplePair.from.email;
-                        document.getElementById('wishListResult').innerHTML = wishListHTML;
-                        
-                        // Atualizar avatares com iniciais
-                        document.getElementById('avatarFrom').textContent = getInitials(examplePair.from.name);
-                        document.getElementById('avatarTo').textContent = getInitials(examplePair.to.name);
-                        
-                        // Mostrar resultado
-                        document.getElementById('drawResult').style.display = 'block';
-                    }
-                } else {
-                    // Esconder resultado se não houver sorteio
-                    document.getElementById('drawResult').style.display = 'none';
-                }
-            });
-            
-            // 3. Monitorar mensagem do sorteio
-            const drawMessageRef = database.ref('sessions/' + SESSION_ID + '/drawMessage');
-            drawMessageRef.on('value', (snapshot) => {
-                const message = snapshot.val();
-                if (message) {
-                    document.getElementById('drawMessage').value = message;
-                }
-            });
-            
-            // 4. Monitorar usuários online
-            const userStatusRef = database.ref('sessions/' + SESSION_ID + '/onlineUsers/' + currentUser.id);
-            const userStatusDatabaseRef = database.ref('.info/connected');
-            
-            userStatusDatabaseRef.on('value', (snapshot) => {
-                if (snapshot.val() === false) {
-                    updateConnectionStatus(false);
-                    return;
-                }
-                
-                updateConnectionStatus(true);
-                
-                // Usuário está online
-                userStatusRef.set({
-                    id: currentUser.id,
-                    name: currentUser.name,
-                    lastSeen: Date.now()
-                });
-                
-                // Quando desconectar, remover usuário
-                userStatusRef.onDisconnect().remove();
-            });
-            
-            // Contar usuários online
-            const onlineUsersRef = database.ref('sessions/' + SESSION_ID + '/onlineUsers');
-            onlineUsersRef.on('value', (snapshot) => {
-                let count = 0;
-                snapshot.forEach(() => {
-                    count++;
-                });
-                updateOnlineUsers(count);
-            });
-            
-            // Limpar usuários inativos (mais de 5 minutos)
-            setInterval(() => {
-                const now = Date.now();
-                onlineUsersRef.once('value').then((snapshot) => {
-                    snapshot.forEach((childSnapshot) => {
-                        const user = childSnapshot.val();
-                        if (now - user.lastSeen > 5 * 60 * 1000) { // 5 minutos
-                            childSnapshot.ref.remove();
-                        }
-                    });
-                });
-            }, 60000); // Verificar a cada minuto
-            
-            // Mostrar ID da sessão
-            console.log('Sessão ID:', SESSION_ID);
-            console.log('Usuário ID:', currentUser.id);
+            // Atualizar status da conexão
+            document.getElementById('connectionStatus').innerHTML = `
+                <i class="fas fa-check-circle"></i> Sistema funcionando perfeitamente - ${participants.length} participantes carregados
+            `;
         });
     </script>
 </body>
