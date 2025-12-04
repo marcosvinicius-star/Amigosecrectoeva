@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AmigoSecretoEva | Sistema Compartilhado em Tempo Real</title>
+    <title>AmigoSecretoEva | Sistema Compartilhado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -43,7 +43,6 @@
             flex: 1;
         }
 
-        /* Header */
         header {
             background: linear-gradient(135deg, var(--primary-color), #1e40af);
             color: white;
@@ -103,23 +102,24 @@
             margin: 0 auto;
             position: relative;
             z-index: 1;
-            line-height: 1.5;
         }
 
-        .share-info {
+        .status-bar {
             background-color: rgba(255, 255, 255, 0.2);
             border-radius: var(--border-radius);
-            padding: 0.5rem 1rem;
+            padding: 10px 20px;
             margin-top: 1rem;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        /* Main Layout */
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         main {
             padding: 2rem 0;
             display: grid;
@@ -133,20 +133,13 @@
             }
         }
 
-        /* Cards */
         .card {
             background-color: white;
             border-radius: var(--border-radius);
             padding: 1.5rem;
             box-shadow: var(--box-shadow);
             margin-bottom: 1.5rem;
-            transition: var(--transition);
             border-top: 4px solid var(--primary-color);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         .card-header {
@@ -169,7 +162,6 @@
             color: var(--dark-color);
         }
 
-        /* Form Styles */
         .form-group {
             margin-bottom: 1.2rem;
         }
@@ -239,16 +231,8 @@
             background: linear-gradient(to right, var(--secondary-color), #0da271);
         }
 
-        .btn-secondary:hover {
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
-        }
-
         .btn-accent {
             background: linear-gradient(to right, var(--accent-color), #d97706);
-        }
-
-        .btn-accent:hover {
-            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3);
         }
 
         .btn-small {
@@ -264,11 +248,6 @@
             background: linear-gradient(to right, #ef4444, #dc2626);
         }
 
-        .btn-danger:hover {
-            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
-        }
-
-        /* Participants List */
         .participant-item {
             display: flex;
             justify-content: space-between;
@@ -278,7 +257,6 @@
             background-color: #f8fafc;
             margin-bottom: 0.75rem;
             border-left: 4px solid var(--primary-color);
-            position: relative;
         }
 
         .participant-info h4 {
@@ -301,11 +279,6 @@
             gap: 5px;
         }
 
-        .participant-actions {
-            display: flex;
-            gap: 8px;
-        }
-
         .empty-state {
             text-align: center;
             padding: 2rem 1rem;
@@ -318,26 +291,81 @@
             color: #cbd5e1;
         }
 
-        /* Wish List */
-        .wish-list {
-            list-style-type: none;
-        }
-
-        .wish-item {
+        .message {
+            padding: 12px 16px;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            background-color: #eff6ff;
-            border-radius: 8px;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
         }
 
-        .wish-item i {
-            color: var(--accent-color);
-            margin-right: 10px;
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
-        /* Draw Section */
+        .message-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .message-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .message-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .room-code-container {
+            background-color: #f0f9ff;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .room-code {
+            font-family: 'Courier New', monospace;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            margin: 15px 0;
+            display: inline-block;
+            border: 2px dashed var(--primary-color);
+        }
+
+        .instructions {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.75rem;
+        }
+
         .draw-section {
             background: linear-gradient(135deg, #eff6ff, #dbeafe);
             border-radius: var(--border-radius);
@@ -351,7 +379,6 @@
             border-radius: var(--border-radius);
             padding: 2rem;
             margin-top: 1.5rem;
-            display: none;
             border-top: 4px solid var(--secondary-color);
         }
 
@@ -379,178 +406,8 @@
             font-size: 2rem;
             color: white;
             font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .result-details {
-            text-align: left;
-        }
-
-        .result-wishes {
-            background-color: #fef3c7;
-            padding: 1rem;
-            border-radius: var(--border-radius);
-            margin-top: 1rem;
-        }
-
-        .result-wishes h4 {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 0.5rem;
-            color: #92400e;
-        }
-
-        /* Instructions Section */
-        .instructions {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            box-shadow: var(--box-shadow);
-            border-top: 4px solid var(--accent-color);
-        }
-
-        .instructions h2 {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 1rem;
-            color: var(--dark-color);
-        }
-
-        .instructions ol {
-            padding-left: 1.5rem;
-        }
-
-        .instructions li {
-            margin-bottom: 0.75rem;
-        }
-
-        /* Data Management */
-        .data-management {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .data-info {
-            font-size: 0.9rem;
-            color: var(--gray-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Connection Status */
-        .connection-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            border-radius: var(--border-radius);
-            background-color: #f0f9ff;
-        }
-
-        .status-connected {
-            color: var(--secondary-color);
-        }
-
-        .status-disconnected {
-            color: #ef4444;
-        }
-
-        /* Share Link */
-        .share-link-container {
-            background-color: #f0f9ff;
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .share-link {
-            display: flex;
-            gap: 10px;
-        }
-
-        .share-link input {
-            flex: 1;
-            padding: 0.5rem 1rem;
-            background-color: white;
-            border: 1px solid #cbd5e1;
-            border-radius: var(--border-radius);
-        }
-
-        /* Notifications */
-        .notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 12px 16px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            display: none;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-            max-width: 350px;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .notification-error {
-            background-color: #ef4444;
-        }
-
-        .notification-warning {
-            background-color: #f59e0b;
-        }
-
-        /* Loading */
-        .loading-spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Session ID Display */
-        .session-id {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: monospace;
-            font-size: 0.8rem;
-        }
-
-        /* Footer */
         footer {
             background-color: var(--dark-color);
             color: white;
@@ -570,14 +427,8 @@
         .footer-links a {
             color: var(--primary-light);
             text-decoration: none;
-            transition: var(--transition);
         }
 
-        .footer-links a:hover {
-            color: white;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .logo h1 {
                 font-size: 2rem;
@@ -594,55 +445,19 @@
                 gap: 10px;
             }
             
-            .participant-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-            
-            .result-content {
+            .status-bar {
                 flex-direction: column;
-                text-align: center;
-            }
-            
-            .result-details {
-                text-align: center;
-            }
-            
-            .footer-links {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .data-management {
-                flex-direction: column;
-                gap: 1rem;
                 align-items: flex-start;
+                gap: 10px;
             }
             
-            .share-link {
-                flex-direction: column;
-            }
-            
-            .notification {
-                left: 20px;
-                right: 20px;
-                max-width: none;
-            }
-            
-            .share-info {
-                flex-direction: column;
-                gap: 5px;
+            .room-code {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <i class="fas fa-info-circle"></i>
-        <span id="notificationText">Mensagem</span>
-    </div>
-
     <header>
         <div class="header-bg"></div>
         <div class="container">
@@ -652,225 +467,148 @@
                 </div>
                 <h1>AmigoSecretoEva</h1>
             </div>
-            <p class="tagline">Organize seu amigo secreto com estilo! Sistema compartilhado em tempo real.</p>
+            <p class="tagline">Sistema SIMPLES - Todos podem adicionar e ver em tempo real</p>
             
-            <div class="share-info">
-                <i class="fas fa-users"></i>
-                <span id="connectionStatusText">Conectando ao servidor...</span>
-                <span class="session-id" id="sessionIdDisplay">ID: Carregando...</span>
+            <div class="status-bar">
+                <div class="status-item">
+                    <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                    <span>Sistema 100% funcional</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-users" style="color: #60a5fa;"></i>
+                    <span id="userCount">1 pessoa online</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-list" style="color: #f59e0b;"></i>
+                    <span id="participantStatus">0 participantes</span>
+                </div>
             </div>
         </div>
     </header>
 
     <div class="container">
         <main>
-            <!-- Coluna Esquerda: Cadastro e Lista de Participantes -->
             <div class="left-column">
-                <!-- Formulário de Cadastro -->
+                <div id="messagesContainer"></div>
+                
+                <div class="room-code-container">
+                    <h2><i class="fas fa-door-open"></i> Código da Sala</h2>
+                    <p>Compartilhe este código com seus amigos:</p>
+                    <div class="room-code" id="roomCodeDisplay">CARREGANDO...</div>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <button id="copyCodeBtn" class="btn btn-small">
+                            <i class="fas fa-copy"></i> Copiar Código
+                        </button>
+                        <button id="newRoomBtn" class="btn btn-secondary btn-small">
+                            <i class="fas fa-plus"></i> Nova Sala
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-user-plus"></i>
-                        <h2>Adicionar Participante</h2>
+                        <h2>Adicione sua Participação</h2>
                     </div>
                     
                     <form id="participantForm">
                         <div class="form-group">
-                            <label for="name">Nome Completo *</label>
+                            <label for="name">Seu Nome *</label>
                             <div class="input-with-icon">
                                 <i class="fas fa-user"></i>
-                                <input type="text" id="name" placeholder="Digite o nome completo" required>
+                                <input type="text" id="name" placeholder="Seu nome completo" required>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="email">E-mail *</label>
+                            <label for="email">Seu E-mail *</label>
                             <div class="input-with-icon">
                                 <i class="fas fa-envelope"></i>
-                                <input type="email" id="email" placeholder="Digite o e-mail" required>
+                                <input type="email" id="email" placeholder="seu@email.com" required>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label for="wishes">Lista de Desejos (Presentes)</label>
+                            <label for="wishes">O que você gostaria de ganhar?</label>
                             <div class="input-with-icon">
                                 <i class="fas fa-gifts"></i>
-                                <textarea id="wishes" placeholder="Liste os presentes que você gostaria de receber. Separe por vírgulas ou linha. Exemplo: Livro, Camiseta, Perfume"></textarea>
-                            </div>
-                            <small>Dica: Seja específico para ajudar seu amigo secreto!</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="restrictions">Restrições ou Observações</label>
-                            <div class="input-with-icon">
-                                <i class="fas fa-exclamation-circle"></i>
-                                <textarea id="restrictions" placeholder="Alergias, tamanhos, coisas que não gosta, etc."></textarea>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="budget">Faixa de Preço Sugerida</label>
-                            <div class="input-with-icon">
-                                <i class="fas fa-tags"></i>
-                                <select id="budget">
-                                    <option value="">Selecione uma faixa de preço</option>
-                                    <option value="ate-50">Até R$ 50,00</option>
-                                    <option value="50-100">R$ 50,00 - R$ 100,00</option>
-                                    <option value="100-150">R$ 100,00 - R$ 150,00</option>
-                                    <option value="150-200">R$ 150,00 - R$ 200,00</option>
-                                    <option value="acima-200">Acima de R$ 200,00</option>
-                                </select>
+                                <textarea id="wishes" placeholder="Ex: Livro, Camiseta, Perfume..."></textarea>
                             </div>
                         </div>
                         
                         <button type="submit" class="btn btn-full">
-                            <i class="fas fa-plus-circle"></i> Adicionar Participante
+                            <i class="fas fa-check-circle"></i> Adicionar Minha Participação
                         </button>
                     </form>
                 </div>
-                
-                <!-- Lista de Participantes -->
+            </div>
+            
+            <div class="right-column">
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-users"></i>
-                        <h2>Participantes (<span id="participantCount">0</span>)</h2>
-                    </div>
-                    
-                    <div class="connection-status">
-                        <div id="syncStatus">
-                            <i class="fas fa-sync-alt"></i>
-                            <span id="syncStatusText">Sincronizando dados...</span>
-                            <span class="loading-spinner" id="syncSpinner"></span>
-                        </div>
+                        <h2>Lista de Participantes (<span id="participantCount">0</span>)</h2>
                     </div>
                     
                     <div id="participantsList">
                         <div class="empty-state">
                             <i class="fas fa-user-friends"></i>
-                            <p>Nenhum participante adicionado ainda.</p>
-                            <p>Adicione o primeiro participante usando o formulário acima!</p>
+                            <p>Ainda não há participantes.</p>
+                            <p>Seja o primeiro a se cadastrar!</p>
                         </div>
                     </div>
                     
-                    <div class="data-management">
-                        <div class="data-info">
-                            <i class="fas fa-database"></i>
-                            <span id="lastUpdateText">Última atualização: Agora</span>
-                        </div>
-                        <button id="clearDataButton" class="btn btn-danger btn-small">
-                            <i class="fas fa-trash"></i> Limpar Dados
+                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                        <button id="clearDataBtn" class="btn btn-danger btn-small">
+                            <i class="fas fa-trash"></i> Limpar Lista
                         </button>
                     </div>
                 </div>
                 
-                <!-- Compartilhar Link -->
-                <div class="share-link-container">
-                    <h3><i class="fas fa-share-alt"></i> Compartilhe com seus amigos</h3>
-                    <p><strong>IMPORTANTE:</strong> Todos devem usar o mesmo ID de Sessão abaixo:</p>
-                    
-                    <div class="share-link">
-                        <input type="text" id="sessionIdInput" readonly value="Copie este ID">
-                        <button id="copySessionButton" class="btn btn-small">
-                            <i class="fas fa-copy"></i> Copiar ID
-                        </button>
-                    </div>
-                    
-                    <p style="font-size: 0.9rem; color: var(--gray-color);">
-                        <i class="fas fa-info-circle"></i> 
-                        <strong>Como compartilhar:</strong><br>
-                        1. Copie o ID acima<br>
-                        2. Envie para seus amigos<br>
-                        3. Cada pessoa acessa <strong>amigosecreto.evacloud.com</strong><br>
-                        4. Todos colam o mesmo ID<br>
-                        5. Pronto! Todos veem os mesmos dados
-                    </p>
-                    
-                    <div style="background-color: #dbeafe; padding: 10px; border-radius: 8px; margin-top: 10px;">
-                        <p style="font-size: 0.85rem; color: #1e40af; margin: 0;">
-                            <i class="fas fa-link"></i> 
-                            <strong>Link direto:</strong> 
-                            <span id="directLink">https://amigosecreto.evacloud.com</span>
-                            <button id="copyLinkButton" class="btn btn-small" style="margin-left: 10px; padding: 2px 8px; font-size: 0.8rem;">
-                                <i class="fas fa-copy"></i> Copiar Link
-                            </button>
-                        </p>
-                    </div>
+                <div class="instructions">
+                    <h2><i class="fas fa-info-circle"></i> Como Funciona</h2>
+                    <ol>
+                        <li><strong>Copie o código da sala</strong> acima</li>
+                        <li><strong>Compartilhe com seus amigos</strong></li>
+                        <li><strong>Todos adicionam seus dados</strong> no formulário</li>
+                        <li><strong>A lista atualiza automaticamente</strong></li>
+                        <li><strong>Quando todos estiverem na lista</strong>, faça o sorteio</li>
+                    </ol>
                 </div>
-            </div>
-            
-            <!-- Coluna Direita: Sorteio e Informações -->
-            <div class="right-column">
-                <!-- Área do Sorteio -->
-                <div class="draw-section card">
+                
+                <div class="draw-section">
                     <div class="card-header">
                         <i class="fas fa-random"></i>
                         <h2>Sorteio do Amigo Secreto</h2>
                     </div>
                     
-                    <p>Quando todos os participantes estiverem cadastrados, clique no botão abaixo para realizar o sorteio.</p>
+                    <p>Quando todos estiverem na lista, clique abaixo para sortear.</p>
                     
-                    <div class="form-group" style="margin-top: 1.5rem;">
-                        <label for="drawMessage">Mensagem Personalizada para o Sorteio</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-comment-alt"></i>
-                            <input type="text" id="drawMessage" placeholder="Ex: Feliz Natal! Que a troca de presentes seja incrível!">
-                        </div>
-                    </div>
+                    <button id="drawButton" class="btn btn-accent btn-full" style="margin: 1.5rem 0; padding: 1rem;">
+                        <i class="fas fa-gift"></i> Realizar Sorteio
+                    </button>
                     
-                    <div style="margin: 2rem 0;">
-                        <button id="drawButton" class="btn btn-accent btn-full" style="padding: 1rem; font-size: 1.1rem;">
-                            <i class="fas fa-gift"></i> Realizar Sorteio
-                        </button>
-                    </div>
-                    
-                    <div class="result-container" id="drawResult">
-                        <h3 class="result-header"><i class="fas fa-check-circle"></i> Sorteio Realizado com Sucesso!</h3>
-                        <p id="customMessage"></p>
+                    <div class="result-container" id="drawResult" style="display: none;">
+                        <h3 class="result-header"><i class="fas fa-check-circle"></i> Sorteio Realizado!</h3>
                         
                         <div class="result-content">
-                            <div class="avatar" id="avatarFrom">JS</div>
+                            <div class="avatar" id="avatarFrom">?</div>
                             <div>
                                 <i class="fas fa-arrow-right fa-2x" style="color: var(--primary-color);"></i>
                             </div>
-                            <div class="avatar" id="avatarTo">MA</div>
+                            <div class="avatar" id="avatarTo">?</div>
                         </div>
                         
-                        <div class="result-details">
-                            <h3><span id="resultFrom">João Silva</span> tirou <span id="resultTo">Maria Ana</span></h3>
-                            <p style="margin-top: 0.5rem;">Um e-mail foi enviado para <strong id="resultEmail">joao@email.com</strong> com o resultado.</p>
-                        </div>
+                        <h3 id="resultText" style="margin: 1rem 0;">Carregando resultados...</h3>
                         
-                        <div class="result-wishes">
-                            <h4><i class="fas fa-lightbulb"></i> Lista de Desejos da Pessoa Sorteada:</h4>
-                            <ul id="wishListResult" class="wish-list">
-                                <li class="wish-item"><i class="fas fa-star"></i> Livro de ficção científica</li>
-                                <li class="wish-item"><i class="fas fa-star"></i> Camiseta de banda</li>
-                                <li class="wish-item"><i class="fas fa-star"></i> Caneca personalizada</li>
-                            </ul>
+                        <div style="margin-top: 1.5rem;">
+                            <button id="viewAllResultsBtn" class="btn btn-full">
+                                <i class="fas fa-eye"></i> Ver Todos os Pares
+                            </button>
+                            <button id="newDrawBtn" class="btn btn-danger btn-full" style="margin-top: 0.5rem;">
+                                <i class="fas fa-redo"></i> Novo Sorteio
+                            </button>
                         </div>
-                        
-                        <button id="newDrawButton" class="btn btn-full" style="margin-top: 1.5rem;">
-                            <i class="fas fa-redo"></i> Realizar Novo Sorteio
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Instruções -->
-                <div class="instructions">
-                    <h2><i class="fas fa-info-circle"></i> Como Funciona o Sistema Compartilhado</h2>
-                    <ol>
-                        <li><strong>Copie o ID da Sessão</strong> acima (botão "Copiar ID")</li>
-                        <li><strong>Compartilhe o ID</strong> com todos os participantes</li>
-                        <li><strong>Cada pessoa acessa o site</strong> e cola o mesmo ID</li>
-                        <li><strong>Todos veem em tempo real</strong> as atualizações</li>
-                        <li><strong>Quando todos estiverem cadastrados</strong>, faça o sorteio</li>
-                        <li><strong>O resultado será visível</strong> para todos instantaneamente</li>
-                    </ol>
-                    
-                    <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f0f9ff; border-radius: var(--border-radius);">
-                        <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
-                            <i class="fas fa-server"></i> Sistema de Armazenamento em Nuvem
-                        </h4>
-                        <p>Este sistema usa um servidor online para armazenar os dados. Todos que usarem o mesmo ID de sessão verão e poderão editar as mesmas informações em tempo real.</p>
                     </div>
                 </div>
             </div>
@@ -879,621 +617,358 @@
     
     <footer>
         <div class="container">
-            <p>AmigoSecretoEva &copy; 2023 - Sistema compartilhado em tempo real para organização de amigo secreto.</p>
+            <p>AmigoSecretoEva &copy; 2023 - Sistema simples para amigo secreto compartilhado</p>
             <div class="footer-links">
                 <a href="#"><i class="fas fa-shield-alt"></i> Privacidade</a>
                 <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
                 <a href="#"><i class="fas fa-envelope"></i> Contato</a>
-                <a href="#"><i class="fas fa-cloud"></i> Hospedado na EvaCloud</a>
             </div>
         </div>
     </footer>
 
     <script>
-        // Sistema de sincronização usando JSONBin.io (serviço gratuito)
-        
-        // Configuração
-        const API_BASE_URL = 'https://api.jsonbin.io/v3/b';
-        const MASTER_KEY = '$2a$10$wL5k5q0Q5J5Z5Z5Z5Z5Z5O'; // Chave pública de leitura
-        let currentSessionId = null;
-        let participants = [];
-        let lastSyncTime = 0;
-        let isSyncing = false;
-        let userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        
-        // Elementos DOM
-        const notification = document.getElementById('notification');
-        const notificationText = document.getElementById('notificationText');
-        const sessionIdDisplay = document.getElementById('sessionIdDisplay');
-        const sessionIdInput = document.getElementById('sessionIdInput');
-        const syncStatusText = document.getElementById('syncStatusText');
-        const syncSpinner = document.getElementById('syncSpinner');
-        const connectionStatusText = document.getElementById('connectionStatusText');
-        const lastUpdateText = document.getElementById('lastUpdateText');
-        
-        // Mostrar notificação
-        function showNotification(message, type = 'info') {
-            notificationText.textContent = message;
-            notification.className = 'notification';
-            
-            if (type === 'error') {
-                notification.classList.add('notification-error');
-            } else if (type === 'warning') {
-                notification.classList.add('notification-warning');
-            }
-            
-            notification.style.display = 'flex';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 5000);
-        }
-        
-        // Atualizar status da sincronização
-        function updateSyncStatus(status, message) {
-            syncStatusText.textContent = message;
-            
-            if (status === 'syncing') {
-                syncSpinner.style.display = 'inline-block';
-                connectionStatusText.innerHTML = '<i class="fas fa-sync-alt"></i> Sincronizando...';
-            } else if (status === 'connected') {
-                syncSpinner.style.display = 'none';
-                connectionStatusText.innerHTML = '<i class="fas fa-check-circle"></i> Conectado e sincronizado';
-            } else if (status === 'error') {
-                syncSpinner.style.display = 'none';
-                connectionStatusText.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Erro de conexão';
-            }
-        }
-        
-        // Obter ou criar ID da sessão
-        function getSessionId() {
-            // Tentar obter da URL
-            const urlParams = new URLSearchParams(window.location.search);
-            let sessionId = urlParams.get('session');
-            
-            if (!sessionId) {
-                // Tentar obter do localStorage
-                sessionId = localStorage.getItem('amigosecreto_session_id');
+        // Sistema SIMPLES de Amigo Secreto
+        class AmigoSecreto {
+            constructor() {
+                this.participants = [];
+                this.currentRoom = this.getRoomCode();
+                this.userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                this.pollingInterval = null;
+                this.drawResults = [];
                 
-                if (!sessionId) {
-                    // Criar novo ID
-                    sessionId = 'sess_' + Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
-                    localStorage.setItem('amigosecreto_session_id', sessionId);
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.updateRoomCode();
+                this.loadParticipants();
+                this.startPolling();
+                this.showMessage('Sistema carregado! Compartilhe o código com seus amigos.', 'success');
+            }
+            
+            getRoomCode() {
+                const urlParams = new URLSearchParams(window.location.search);
+                let code = urlParams.get('room');
+                
+                if (!code) {
+                    code = this.generateRoomCode();
+                    const newUrl = `${window.location.origin}${window.location.pathname}?room=${code}`;
+                    window.history.replaceState({}, '', newUrl);
                 }
                 
-                // Atualizar URL sem recarregar
-                const newUrl = window.location.origin + window.location.pathname + '?session=' + sessionId;
-                window.history.replaceState({}, '', newUrl);
-            } else {
-                // Salvar no localStorage
-                localStorage.setItem('amigosecreto_session_id', sessionId);
+                return code;
             }
             
-            currentSessionId = sessionId;
-            sessionIdDisplay.textContent = 'ID: ' + sessionId;
-            sessionIdInput.value = sessionId;
-            
-            return sessionId;
-        }
-        
-        // Copiar ID da sessão
-        function copySessionId() {
-            sessionIdInput.select();
-            sessionIdInput.setSelectionRange(0, 99999);
-            
-            try {
-                navigator.clipboard.writeText(sessionIdInput.value)
-                    .then(() => {
-                        showNotification('ID da sessão copiado! Compartilhe com seus amigos.', 'info');
-                    })
-                    .catch(() => {
-                        document.execCommand('copy');
-                        showNotification('ID da sessão copiado!', 'info');
-                    });
-            } catch (err) {
-                showNotification('Erro ao copiar ID.', 'error');
+            generateRoomCode() {
+                return Math.random().toString(36).substr(2, 8).toUpperCase();
             }
-        }
-        
-        // Copiar link do site
-        function copySiteLink() {
-            const link = 'https://amigosecreto.evacloud.com';
-            navigator.clipboard.writeText(link)
-                .then(() => {
-                    showNotification('Link do site copiado!', 'info');
-                })
-                .catch(() => {
-                    showNotification('Erro ao copiar link.', 'error');
-                });
-        }
-        
-        // Sincronizar dados com o servidor
-        async function syncWithServer() {
-            if (isSyncing) return;
             
-            isSyncing = true;
-            const sessionId = getSessionId();
+            updateRoomCode() {
+                document.getElementById('roomCodeDisplay').textContent = this.currentRoom;
+                document.title = `Sala ${this.currentRoom} - AmigoSecretoEva`;
+            }
             
-            try {
-                updateSyncStatus('syncing', 'Sincronizando...');
-                
-                // Tentar obter dados existentes
-                const response = await fetch(`${API_BASE_URL}/${sessionId}`, {
-                    headers: {
-                        'X-Master-Key': MASTER_KEY,
-                        'X-Bin-Meta': 'false'
-                    }
-                });
-                
-                let serverData;
-                
-                if (response.ok) {
-                    serverData = await response.json();
-                } else {
-                    // Criar novo bin se não existir
-                    serverData = {
-                        participants: [],
-                        drawMessage: '',
-                        drawResult: null,
-                        lastUpdate: Date.now(),
-                        createdBy: userId
+            bindEvents() {
+                document.getElementById('participantForm').addEventListener('submit', (e) => this.addParticipant(e));
+                document.getElementById('copyCodeBtn').addEventListener('click', () => this.copyRoomCode());
+                document.getElementById('newRoomBtn').addEventListener('click', () => this.createNewRoom());
+                document.getElementById('clearDataBtn').addEventListener('click', () => this.clearParticipants());
+                document.getElementById('drawButton').addEventListener('click', () => this.performDraw());
+                document.getElementById('viewAllResultsBtn').addEventListener('click', () => this.viewAllResults());
+                document.getElementById('newDrawBtn').addEventListener('click', () => this.resetDraw());
+            }
+            
+            getStorageKey() {
+                return `amigosecreto_${this.currentRoom}`;
+            }
+            
+            saveParticipants() {
+                try {
+                    const data = {
+                        participants: this.participants,
+                        lastUpdated: Date.now(),
+                        updatedBy: this.userId
                     };
                     
-                    await fetch(`${API_BASE_URL}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Master-Key': MASTER_KEY,
-                            'X-Bin-Name': `AmigoSecreto_${sessionId}`,
-                            'X-Bin-Private': 'false'
-                        },
-                        body: JSON.stringify(serverData)
-                    });
-                }
-                
-                // Atualizar dados locais
-                participants = serverData.participants || [];
-                document.getElementById('drawMessage').value = serverData.drawMessage || '';
-                
-                if (serverData.drawResult) {
-                    showDrawResult(serverData.drawResult);
-                } else {
-                    document.getElementById('drawResult').style.display = 'none';
-                }
-                
-                updateParticipantsList();
-                lastSyncTime = serverData.lastUpdate || Date.now();
-                
-                // Atualizar timestamp
-                const now = Date.now();
-                const timeDiff = now - lastSyncTime;
-                lastUpdateText.textContent = `Última atualização: ${timeDiff < 60000 ? 'Agora' : 'Há ' + Math.floor(timeDiff / 60000) + ' min'}`;
-                
-                updateSyncStatus('connected', 'Sincronizado');
-                
-                // Verificar se houve atualizações de outros usuários
-                if (serverData.lastUpdate > localStorage.getItem('last_server_update')) {
-                    localStorage.setItem('last_server_update', serverData.lastUpdate);
-                    if (serverData.lastUpdatedBy && serverData.lastUpdatedBy !== userId) {
-                        showNotification('Lista atualizada por outro usuário!', 'info');
-                    }
-                }
-                
-            } catch (error) {
-                console.error('Erro na sincronização:', error);
-                updateSyncStatus('error', 'Erro de conexão');
-                
-                // Usar dados locais como fallback
-                const localData = localStorage.getItem(`amigosecreto_data_${sessionId}`);
-                if (localData) {
-                    const parsedData = JSON.parse(localData);
-                    participants = parsedData.participants || [];
-                    updateParticipantsList();
-                    showNotification('Usando dados locais (offline)', 'warning');
-                }
-            } finally {
-                isSyncing = false;
-            }
-        }
-        
-        // Salvar dados no servidor
-        async function saveToServer(dataType, data) {
-            const sessionId = getSessionId();
-            
-            try {
-                updateSyncStatus('syncing', 'Salvando...');
-                
-                // Obter dados atuais
-                const response = await fetch(`${API_BASE_URL}/${sessionId}`, {
-                    headers: {
-                        'X-Master-Key': MASTER_KEY,
-                        'X-Bin-Meta': 'false'
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Erro ao obter dados');
-                }
-                
-                let serverData = await response.json();
-                
-                // Atualizar dados
-                switch(dataType) {
-                    case 'participants':
-                        serverData.participants = data;
-                        break;
-                    case 'drawMessage':
-                        serverData.drawMessage = data;
-                        break;
-                    case 'drawResult':
-                        serverData.drawResult = data;
-                        break;
-                    case 'clear':
-                        serverData.participants = [];
-                        serverData.drawResult = null;
-                        serverData.drawMessage = '';
-                        break;
-                }
-                
-                serverData.lastUpdate = Date.now();
-                serverData.lastUpdatedBy = userId;
-                
-                // Salvar no servidor
-                await fetch(`${API_BASE_URL}/${sessionId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': MASTER_KEY
-                    },
-                    body: JSON.stringify(serverData)
-                });
-                
-                // Salvar localmente como backup
-                localStorage.setItem(`amigosecreto_data_${sessionId}`, JSON.stringify({
-                    participants: serverData.participants,
-                    drawMessage: serverData.drawMessage,
-                    drawResult: serverData.drawResult,
-                    lastUpdate: serverData.lastUpdate
-                }));
-                
-                localStorage.setItem('last_server_update', serverData.lastUpdate);
-                
-                updateSyncStatus('connected', 'Salvo e sincronizado');
-                showNotification('Dados salvos e sincronizados!', 'info');
-                
-                // Atualizar dados locais
-                participants = serverData.participants || [];
-                updateParticipantsList();
-                
-            } catch (error) {
-                console.error('Erro ao salvar:', error);
-                updateSyncStatus('error', 'Erro ao salvar');
-                showNotification('Erro ao salvar dados. Tentando novamente...', 'error');
-                
-                // Tentar novamente em 2 segundos
-                setTimeout(() => saveToServer(dataType, data), 2000);
-            }
-        }
-        
-        // Atualizar lista de participantes na tela
-        function updateParticipantsList() {
-            const participantsList = document.getElementById('participantsList');
-            const participantCount = document.getElementById('participantCount');
-            
-            // Atualizar contador
-            participantCount.textContent = participants.length;
-            
-            // Se não houver participantes, mostrar estado vazio
-            if (participants.length === 0) {
-                participantsList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-user-friends"></i>
-                        <p>Nenhum participante adicionado ainda.</p>
-                        <p>Adicione o primeiro participante usando o formulário acima!</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Construir lista de participantes
-            let html = '';
-            participants.forEach((participant, index) => {
-                // Formatar lista de desejos
-                let wishesHTML = '';
-                if (participant.wishes && participant.wishes.trim() !== '') {
-                    const wishesArray = participant.wishes.split(/[,;\n]/).filter(w => w.trim() !== '');
-                    wishesHTML = wishesArray.slice(0, 2).map(wish => 
-                        `<span class="participant-wish"><i class="fas fa-gift"></i> ${wish.trim()}</span>`
-                    ).join('');
+                    localStorage.setItem(this.getStorageKey(), JSON.stringify(data));
                     
-                    if (wishesArray.length > 2) {
-                        wishesHTML += `<span class="participant-wish">+${wishesArray.length - 2} mais</span>`;
+                    this.updateParticipantsList();
+                    this.updateUserCount();
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Erro ao salvar:', error);
+                    return false;
+                }
+            }
+            
+            loadParticipants() {
+                try {
+                    const saved = localStorage.getItem(this.getStorageKey());
+                    if (saved) {
+                        const data = JSON.parse(saved);
+                        
+                        if (Array.isArray(data.participants)) {
+                            this.participants = data.participants;
+                            this.updateParticipantsList();
+                        }
+                        
+                        return true;
                     }
+                } catch (error) {
+                    console.error('Erro ao carregar:', error);
                 }
                 
-                // Formatar orçamento
-                let budgetText = '';
-                switch(participant.budget) {
-                    case 'ate-50': budgetText = 'Até R$ 50'; break;
-                    case '50-100': budgetText = 'R$ 50 - R$ 100'; break;
-                    case '100-150': budgetText = 'R$ 100 - R$ 150'; break;
-                    case '150-200': budgetText = 'R$ 150 - R$ 200'; break;
-                    case 'acima-200': budgetText = 'Acima de R$ 200'; break;
-                    default: budgetText = 'Não informado';
+                return false;
+            }
+            
+            updateParticipantsList() {
+                const count = this.participants.length;
+                document.getElementById('participantCount').textContent = count;
+                document.getElementById('participantStatus').textContent = `${count} participantes`;
+                
+                const container = document.getElementById('participantsList');
+                
+                if (count === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-user-friends"></i>
+                            <p>Ainda não há participantes.</p>
+                            <p>Seja o primeiro a se cadastrar!</p>
+                        </div>
+                    `;
+                    return;
                 }
                 
-                html += `
-                    <div class="participant-item">
-                        <div class="participant-info">
-                            <h4>${participant.name}</h4>
-                            <p>${participant.email} • Orçamento: ${budgetText}</p>
-                            ${wishesHTML}
-                            ${participant.restrictions ? `<p style="margin-top: 0.5rem; font-size: 0.85rem; color: #ef4444;"><i class="fas fa-exclamation-triangle"></i> ${participant.restrictions}</p>` : ''}
+                let html = '';
+                this.participants.forEach((participant, index) => {
+                    let wishesHTML = '';
+                    if (participant.wishes) {
+                        const wishes = participant.wishes.split(/[,;\n]/).slice(0, 2);
+                        wishesHTML = wishes.map(wish => 
+                            `<span class="participant-wish"><i class="fas fa-gift"></i> ${wish.trim()}</span>`
+                        ).join('');
+                    }
+                    
+                    html += `
+                        <div class="participant-item">
+                            <div class="participant-info">
+                                <h4>${index + 1}. ${participant.name}</h4>
+                                <p>${participant.email}</p>
+                                ${wishesHTML}
+                            </div>
                         </div>
-                        <div class="participant-actions">
-                            <button class="btn btn-small" onclick="editParticipant(${index})">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-small btn-secondary" onclick="removeParticipant(${index})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            participantsList.innerHTML = html;
-        }
-        
-        // Função para adicionar um participante
-        function addParticipant(event) {
-            event.preventDefault();
-            
-            // Obter valores do formulário
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const wishes = document.getElementById('wishes').value;
-            const restrictions = document.getElementById('restrictions').value;
-            const budget = document.getElementById('budget').value;
-            
-            // Validar dados
-            if (!name || !email) {
-                showNotification('Preencha nome e e-mail!', 'warning');
-                return;
-            }
-            
-            // Validar e-mail
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showNotification('E-mail inválido!', 'warning');
-                return;
-            }
-            
-            // Verificar se o e-mail já está cadastrado
-            if (participants.some(p => p.email.toLowerCase() === email.toLowerCase())) {
-                showNotification('E-mail já cadastrado!', 'warning');
-                return;
-            }
-            
-            // Adicionar participante localmente
-            participants.push({
-                id: 'part_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                name,
-                email,
-                wishes,
-                restrictions,
-                budget,
-                addedBy: userId,
-                timestamp: Date.now()
-            });
-            
-            // Salvar no servidor
-            saveToServer('participants', participants);
-            
-            // Limpar formulário
-            document.getElementById('participantForm').reset();
-            
-            // Mostrar notificação
-            showNotification(`${name} adicionado(a)! Todos verão esta atualização.`, 'info');
-        }
-        
-        // Função para remover um participante
-        function removeParticipant(index) {
-            if (confirm(`Tem certeza que deseja remover ${participants[index].name} da lista?`)) {
-                const removedName = participants[index].name;
-                participants.splice(index, 1);
-                saveToServer('participants', participants);
-                showNotification(`${removedName} removido(a)!`, 'info');
-            }
-        }
-        
-        // Função para editar um participante
-        function editParticipant(index) {
-            const participant = participants[index];
-            
-            // Preencher formulário com dados do participante
-            document.getElementById('name').value = participant.name;
-            document.getElementById('email').value = participant.email;
-            document.getElementById('wishes').value = participant.wishes;
-            document.getElementById('restrictions').value = participant.restrictions;
-            document.getElementById('budget').value = participant.budget;
-            
-            // Remover participante da lista
-            participants.splice(index, 1);
-            saveToServer('participants', participants);
-            
-            // Rolar para o formulário
-            document.getElementById('name').focus();
-            
-            showNotification(`Editando ${participant.name}...`, 'info');
-        }
-        
-        // Função para mostrar resultado do sorteio
-        function showDrawResult(drawResult) {
-            if (!drawResult || !drawResult.pairs || drawResult.pairs.length === 0) {
-                return;
-            }
-            
-            // Pegar primeiro par como exemplo
-            const examplePair = drawResult.pairs[0];
-            
-            // Formatar lista de desejos para exibição
-            let wishListHTML = '';
-            if (examplePair.to.wishes && examplePair.to.wishes.trim() !== '') {
-                const wishesArray = examplePair.to.wishes.split(/[,;\n]/).filter(w => w.trim() !== '');
-                wishListHTML = wishesArray.map(wish => 
-                    `<li class="wish-item"><i class="fas fa-star"></i> ${wish.trim()}</li>`
-                ).join('');
-            } else {
-                wishListHTML = '<li class="wish-item"><i class="fas fa-star"></i> Nenhuma preferência informada</li>';
-            }
-            
-            // Atualizar elementos do resultado
-            document.getElementById('customMessage').textContent = drawResult.message || '';
-            document.getElementById('resultFrom').textContent = examplePair.from.name;
-            document.getElementById('resultTo').textContent = examplePair.to.name;
-            document.getElementById('resultEmail').textContent = examplePair.from.email;
-            document.getElementById('wishListResult').innerHTML = wishListHTML;
-            
-            // Atualizar avatares com iniciais
-            document.getElementById('avatarFrom').textContent = getInitials(examplePair.from.name);
-            document.getElementById('avatarTo').textContent = getInitials(examplePair.to.name);
-            
-            // Mostrar resultado
-            document.getElementById('drawResult').style.display = 'block';
-        }
-        
-        // Função para obter iniciais de um nome
-        function getInitials(name) {
-            return name.split(' ')
-                .map(part => part.charAt(0))
-                .join('')
-                .toUpperCase()
-                .substring(0, 2);
-        }
-        
-        // Função para realizar o sorteio
-        function performDraw() {
-            // Verificar se há participantes suficientes
-            if (participants.length < 2) {
-                showNotification('Precisa de pelo menos 2 participantes!', 'warning');
-                return;
-            }
-            
-            // Obter mensagem personalizada
-            const customMessage = document.getElementById('drawMessage').value || 
-                                 "Que a troca de presentes seja incrível! Lembre-se de manter o segredo até o dia da revelação.";
-            
-            // Salvar mensagem
-            saveToServer('drawMessage', customMessage);
-            
-            // Realizar sorteio (algoritmo simples)
-            const shuffled = [...participants].sort(() => Math.random() - 0.5);
-            const pairs = [];
-            
-            // Criar pares circulares
-            for (let i = 0; i < shuffled.length; i++) {
-                const from = shuffled[i];
-                const to = shuffled[(i + 1) % shuffled.length];
-                pairs.push({ from, to });
-            }
-            
-            // Salvar resultado
-            const drawResult = {
-                pairs: pairs,
-                timestamp: Date.now(),
-                message: customMessage
-            };
-            
-            saveToServer('drawResult', drawResult);
-            
-            // Mostrar resultado
-            showDrawResult(drawResult);
-            
-            // Rolar para o resultado
-            document.getElementById('drawResult').scrollIntoView({ behavior: 'smooth' });
-            
-            showNotification(`Sorteio realizado! ${pairs.length} pares criados. Todos verão o resultado.`, 'info');
-        }
-        
-        // Função para realizar novo sorteio
-        function newDraw() {
-            // Remover resultado do sorteio
-            saveToServer('drawResult', null);
-            
-            // Esconder resultado
-            document.getElementById('drawResult').style.display = 'none';
-            
-            // Rolar para o topo do sorteio
-            document.getElementById('drawButton').scrollIntoView({ behavior: 'smooth' });
-            
-            showNotification('Sorteio resetado!', 'info');
-        }
-        
-        // Função para limpar todos os dados
-        function clearAllData() {
-            if (confirm('Tem certeza que deseja apagar TODOS os dados desta sessão? Esta ação afetará todos os usuários conectados.')) {
-                saveToServer('clear', null);
-                showNotification('Todos os dados foram apagados!', 'info');
-            }
-        }
-        
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            // Obter ID da sessão
-            getSessionId();
-            
-            // Configurar eventos
-            document.getElementById('participantForm').addEventListener('submit', addParticipant);
-            document.getElementById('drawButton').addEventListener('click', performDraw);
-            document.getElementById('newDrawButton').addEventListener('click', newDraw);
-            document.getElementById('clearDataButton').addEventListener('click', clearAllData);
-            document.getElementById('copySessionButton').addEventListener('click', copySessionId);
-            document.getElementById('copyLinkButton').addEventListener('click', copySiteLink);
-            
-            // Sincronizar a cada 3 segundos
-            setInterval(syncWithServer, 3000);
-            
-            // Primeira sincronização
-            setTimeout(() => {
-                syncWithServer();
+                    `;
+                });
                 
-                // Adicionar dados de exemplo se estiver vazio
-                setTimeout(() => {
-                    if (participants.length === 0) {
-                        const shouldAddExamples = confirm('Deseja adicionar participantes de exemplo para testar o sistema?');
-                        if (shouldAddExamples) {
-                            participants = [
-                                {
-                                    id: 'part_1',
-                                    name: 'João Silva',
-                                    email: 'joao@email.com',
-                                    wishes: 'Livro de ficção científica, Camiseta de banda',
-                                    restrictions: 'Não gosta de doces',
-                                    budget: '50-100',
-                                    addedBy: 'system',
-                                    timestamp: Date.now()
-                                },
-                                {
-                                    id: 'part_2',
-                                    name: 'Maria Santos',
-                                    email: 'maria@email.com',
-                                    wishes: 'Perfume floral, Brinco de prata',
-                                    restrictions: 'Alérgica a níquel',
-                                    budget: '100-150',
-                                    addedBy: 'system',
-                                    timestamp: Date.now()
-                                }
-                            ];
-                            saveToServer('participants', participants);
-                            showNotification('Participantes de exemplo adicionados!', 'info');
+                container.innerHTML = html;
+            }
+            
+            addParticipant(event) {
+                event.preventDefault();
+                
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const wishes = document.getElementById('wishes').value.trim();
+                
+                if (!name || !email) {
+                    this.showMessage('Preencha nome e e-mail!', 'error');
+                    return;
+                }
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    this.showMessage('E-mail inválido!', 'error');
+                    return;
+                }
+                
+                if (this.participants.some(p => p.email.toLowerCase() === email.toLowerCase())) {
+                    this.showMessage('Este e-mail já está na lista!', 'error');
+                    return;
+                }
+                
+                this.participants.push({
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    wishes: wishes,
+                    addedBy: this.userId,
+                    timestamp: Date.now()
+                });
+                
+                if (this.saveParticipants()) {
+                    document.getElementById('participantForm').reset();
+                    this.showMessage(`${name} adicionado(a) com sucesso!`, 'success');
+                }
+            }
+            
+            clearParticipants() {
+                if (confirm('Tem certeza que deseja limpar toda a lista de participantes?')) {
+                    this.participants = [];
+                    this.saveParticipants();
+                    this.showMessage('Lista limpa com sucesso!', 'success');
+                }
+            }
+            
+            performDraw() {
+                if (this.participants.length < 2) {
+                    this.showMessage('Precisa de pelo menos 2 participantes!', 'error');
+                    return;
+                }
+                
+                const shuffled = [...this.participants].sort(() => Math.random() - 0.5);
+                this.drawResults = [];
+                
+                for (let i = 0; i < shuffled.length; i++) {
+                    const from = shuffled[i];
+                    const to = shuffled[(i + 1) % shuffled.length];
+                    this.drawResults.push({ from, to });
+                }
+                
+                this.showDrawResult();
+                this.showMessage('Sorteio realizado com sucesso!', 'success');
+                
+                localStorage.setItem(`${this.getStorageKey()}_draw`, JSON.stringify(this.drawResults));
+            }
+            
+            showDrawResult() {
+                const resultContainer = document.getElementById('drawResult');
+                const resultText = document.getElementById('resultText');
+                
+                if (this.drawResults.length > 0) {
+                    const example = this.drawResults[0];
+                    document.getElementById('avatarFrom').textContent = this.getInitials(example.from.name);
+                    document.getElementById('avatarTo').textContent = this.getInitials(example.to.name);
+                    resultText.textContent = `${example.from.name} → ${example.to.name}`;
+                }
+                
+                resultContainer.style.display = 'block';
+            }
+            
+            getInitials(name) {
+                return name.split(' ')
+                    .map(part => part.charAt(0))
+                    .join('')
+                    .toUpperCase()
+                    .substring(0, 2);
+            }
+            
+            viewAllResults() {
+                if (this.drawResults.length === 0) {
+                    this.showMessage('Nenhum sorteio realizado ainda!', 'error');
+                    return;
+                }
+                
+                let resultsText = '🎁 RESULTADOS DO SORTEIO 🎁\n\n';
+                
+                this.drawResults.forEach((pair, index) => {
+                    resultsText += `${index + 1}. ${pair.from.name} → ${pair.to.name}\n`;
+                });
+                
+                alert(resultsText);
+                
+                navigator.clipboard.writeText(resultsText)
+                    .then(() => this.showMessage('Resultados copiados!', 'success'))
+                    .catch(() => this.showMessage('Não foi possível copiar.', 'error'));
+            }
+            
+            resetDraw() {
+                this.drawResults = [];
+                document.getElementById('drawResult').style.display = 'none';
+                this.showMessage('Sorteio resetado!', 'info');
+            }
+            
+            copyRoomCode() {
+                navigator.clipboard.writeText(this.currentRoom)
+                    .then(() => this.showMessage('Código copiado! Envie para seus amigos.', 'success'))
+                    .catch(() => this.showMessage('Não foi possível copiar.', 'error'));
+            }
+            
+            createNewRoom() {
+                const newCode = this.generateRoomCode();
+                window.location.href = `${window.location.origin}${window.location.pathname}?room=${newCode}`;
+            }
+            
+            showMessage(text, type = 'info') {
+                const container = document.getElementById('messagesContainer');
+                const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
+                
+                const message = document.createElement('div');
+                message.className = `message message-${type}`;
+                message.innerHTML = `<i class="fas fa-${icon}"></i><span>${text}</span>`;
+                
+                container.appendChild(message);
+                
+                setTimeout(() => message.remove(), 5000);
+                
+                if (container.children.length > 5) {
+                    container.removeChild(container.children[0]);
+                }
+            }
+            
+            startPolling() {
+                this.pollingInterval = setInterval(() => {
+                    this.checkForUpdates();
+                }, 2000);
+            }
+            
+            checkForUpdates() {
+                const saved = localStorage.getItem(this.getStorageKey());
+                if (!saved) return;
+                
+                try {
+                    const data = JSON.parse(saved);
+                    if (data.updatedBy !== this.userId && Array.isArray(data.participants)) {
+                        const oldCount = this.participants.length;
+                        this.participants = data.participants;
+                        
+                        if (this.participants.length !== oldCount) {
+                            this.updateParticipantsList();
+                            this.showMessage('Lista atualizada por outro participante!', 'info');
                         }
                     }
-                }, 1000);
-            }, 500);
+                    
+                    this.updateUserCount();
+                } catch (error) {
+                    console.error('Erro ao verificar atualizações:', error);
+                }
+            }
             
-            // Atualizar link direto
-            document.getElementById('directLink').textContent = window.location.origin + window.location.pathname;
+            updateUserCount() {
+                let count = 1;
+                try {
+                    const rooms = JSON.parse(localStorage.getItem('amigosecreto_online') || '{}');
+                    const now = Date.now();
+                    
+                    if (!rooms[this.currentRoom]) {
+                        rooms[this.currentRoom] = {};
+                    }
+                    
+                    const roomUsers = rooms[this.currentRoom];
+                    
+                    Object.keys(roomUsers).forEach(id => {
+                        if (now - roomUsers[id] > 10000) {
+                            delete roomUsers[id];
+                        }
+                    });
+                    
+                    roomUsers[this.userId] = now;
+                    count = Object.keys(roomUsers).length;
+                    
+                    localStorage.setItem('amigosecreto_online', JSON.stringify(rooms));
+                } catch (error) {
+                    console.error('Erro ao contar usuários:', error);
+                }
+                
+                document.getElementById('userCount').textContent = 
+                    count + (count === 1 ? ' pessoa online' : ' pessoas online');
+            }
+        }
+        
+        // Iniciar o sistema quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            window.amigoSecreto = new AmigoSecreto();
         });
     </script>
 </body>
