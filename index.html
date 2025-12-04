@@ -247,6 +247,14 @@
             width: 100%;
         }
 
+        .btn-danger {
+            background: linear-gradient(to right, #ef4444, #dc2626);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+        }
+
         /* Participants List */
         .participant-item {
             display: flex;
@@ -405,6 +413,21 @@
             margin-bottom: 0.75rem;
         }
 
+        /* Data Management */
+        .data-management {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .data-info {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+        }
+
         /* Footer */
         footer {
             background-color: var(--dark-color);
@@ -465,6 +488,12 @@
             .footer-links {
                 flex-direction: column;
                 gap: 1rem;
+            }
+            
+            .data-management {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
             }
         }
     </style>
@@ -563,6 +592,15 @@
                             <p>Adicione o primeiro participante usando o formulário acima!</p>
                         </div>
                     </div>
+                    
+                    <div class="data-management">
+                        <div class="data-info">
+                            <i class="fas fa-database"></i> Dados salvos automaticamente
+                        </div>
+                        <button id="clearDataButton" class="btn btn-danger btn-small">
+                            <i class="fas fa-trash"></i> Limpar Todos os Dados
+                        </button>
+                    </div>
                 </div>
             </div>
             
@@ -636,9 +674,9 @@
                     
                     <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f0f9ff; border-radius: var(--border-radius);">
                         <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
-                            <i class="fas fa-lightbulb"></i> Dica para Lista de Desejos
+                            <i class="fas fa-lightbulb"></i> Dados Salvos Automaticamente
                         </h4>
-                        <p>Inclua opções em diferentes faixas de preço, marcas preferidas, cores favoritas e tamanhos (se for roupa). Quanto mais detalhes, mais fácil para quem vai presentear!</p>
+                        <p>Todas as informações são salvas automaticamente no seu navegador. Mesmo se você fechar a página ou atualizá-la, os dados permanecerão disponíveis.</p>
                     </div>
                 </div>
             </div>
@@ -659,6 +697,74 @@
     <script>
         // Array para armazenar os participantes
         let participants = [];
+        let lastSorteio = null;
+        
+        // Chaves para LocalStorage
+        const STORAGE_KEYS = {
+            PARTICIPANTS: 'amigoSecretoEva_participants',
+            SORTEIO: 'amigoSecretoEva_sorteio',
+            MESSAGE: 'amigoSecretoEva_message'
+        };
+        
+        // Função para salvar dados no LocalStorage
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.PARTICIPANTS, JSON.stringify(participants));
+                console.log('Dados salvos no LocalStorage');
+            } catch (error) {
+                console.error('Erro ao salvar no LocalStorage:', error);
+            }
+        }
+        
+        // Função para carregar dados do LocalStorage
+        function loadFromLocalStorage() {
+            try {
+                const savedParticipants = localStorage.getItem(STORAGE_KEYS.PARTICIPANTS);
+                const savedSorteio = localStorage.getItem(STORAGE_KEYS.SORTEIO);
+                const savedMessage = localStorage.getItem(STORAGE_KEYS.MESSAGE);
+                
+                if (savedParticipants) {
+                    participants = JSON.parse(savedParticipants);
+                    console.log('Dados carregados do LocalStorage');
+                }
+                
+                if (savedSorteio) {
+                    lastSorteio = JSON.parse(savedSorteio);
+                }
+                
+                if (savedMessage) {
+                    document.getElementById('drawMessage').value = savedMessage;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Erro ao carregar do LocalStorage:', error);
+                return false;
+            }
+        }
+        
+        // Função para limpar todos os dados
+        function clearAllData() {
+            if (confirm('Tem certeza que deseja apagar TODOS os dados? Esta ação não pode ser desfeita.')) {
+                participants = [];
+                lastSorteio = null;
+                
+                try {
+                    localStorage.removeItem(STORAGE_KEYS.PARTICIPANTS);
+                    localStorage.removeItem(STORAGE_KEYS.SORTEIO);
+                    localStorage.removeItem(STORAGE_KEYS.MESSAGE);
+                    console.log('Todos os dados foram removidos do LocalStorage');
+                } catch (error) {
+                    console.error('Erro ao limpar LocalStorage:', error);
+                }
+                
+                updateParticipantsList();
+                document.getElementById('drawMessage').value = '';
+                document.getElementById('drawResult').style.display = 'none';
+                
+                alert('Todos os dados foram apagados com sucesso!');
+            }
+        }
         
         // Função para atualizar a lista de participantes na tela
         function updateParticipantsList() {
@@ -728,6 +834,9 @@
             });
             
             participantsList.innerHTML = html;
+            
+            // Salvar automaticamente após atualizar a lista
+            saveToLocalStorage();
         }
         
         // Função para adicionar um participante
@@ -785,6 +894,7 @@
             if (confirm(`Tem certeza que deseja remover ${participants[index].name} da lista?`)) {
                 participants.splice(index, 1);
                 updateParticipantsList();
+                alert('Participante removido com sucesso!');
             }
         }
         
@@ -807,6 +917,8 @@
             
             // Rolar para o formulário
             document.getElementById('name').focus();
+            
+            alert(`Editando participante: ${participant.name}. Preencha as informações e clique em "Adicionar Participante" para salvar as alterações.`);
         }
         
         // Função para realizar o sorteio
@@ -817,9 +929,16 @@
                 return;
             }
             
-            // Obter mensagem personalizada
+            // Obter e salvar mensagem personalizada
             const customMessage = document.getElementById('drawMessage').value || 
                                  "Que a troca de presentes seja incrível! Lembre-se de manter o segredo até o dia da revelação.";
+            
+            // Salvar mensagem no LocalStorage
+            try {
+                localStorage.setItem(STORAGE_KEYS.MESSAGE, customMessage);
+            } catch (error) {
+                console.error('Erro ao salvar mensagem:', error);
+            }
             
             // Realizar sorteio (algoritmo simples)
             const shuffled = [...participants].sort(() => Math.random() - 0.5);
@@ -830,6 +949,14 @@
                 const from = shuffled[i];
                 const to = shuffled[(i + 1) % shuffled.length];
                 pairs.push({ from, to });
+            }
+            
+            // Salvar sorteio no LocalStorage
+            try {
+                localStorage.setItem(STORAGE_KEYS.SORTEIO, JSON.stringify(pairs));
+                lastSorteio = pairs;
+            } catch (error) {
+                console.error('Erro ao salvar sorteio:', error);
             }
             
             // Selecionar um par aleatório para mostrar como exemplo
@@ -892,6 +1019,9 @@
                 console.log('---');
             });
             console.log('Todos os e-mails foram enviados com sucesso!');
+            
+            // Mostrar mensagem de confirmação
+            alert(`Sorteio realizado com sucesso! E-mails foram enviados para todos os ${pairs.length} participantes.`);
         }
         
         // Função para realizar novo sorteio
@@ -899,8 +1029,13 @@
             // Esconder resultado
             document.getElementById('drawResult').style.display = 'none';
             
-            // Limpar mensagem personalizada
-            document.getElementById('drawMessage').value = '';
+            // Limpar sorteio salvo
+            try {
+                localStorage.removeItem(STORAGE_KEYS.SORTEIO);
+                lastSorteio = null;
+            } catch (error) {
+                console.error('Erro ao limpar sorteio:', error);
+            }
             
             // Rolar para o topo do sorteio
             document.getElementById('drawButton').scrollIntoView({ behavior: 'smooth' });
@@ -908,10 +1043,49 @@
         
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Adicionar participantes de exemplo (apenas para demonstração)
-            participants = [
-               
-            ];
+            // Carregar dados salvos
+            const loaded = loadFromLocalStorage();
+            
+            if (!loaded || participants.length === 0) {
+                // Adicionar participantes de exemplo apenas se não houver dados salvos
+                participants = [
+                    {
+                        name: 'João Silva',
+                        email: 'joao@email.com',
+                        wishes: 'Livro de ficção científica, Camiseta de banda, Caneca personalizada',
+                        restrictions: 'Não gosto de doces',
+                        budget: '50-100',
+                        id: 1
+                    },
+                    {
+                        name: 'Maria Ana',
+                        email: 'maria@email.com',
+                        wishes: 'Perfume floral, Brinco de prata, Agenda 2024',
+                        restrictions: 'Alérgica a níquel',
+                        budget: '100-150',
+                        id: 2
+                    },
+                    {
+                        name: 'Carlos Santos',
+                        email: 'carlos@email.com',
+                        wishes: 'Jogo de tabuleiro, Garrafa térmica, Livro de receitas',
+                        restrictions: '',
+                        budget: 'ate-50',
+                        id: 3
+                    },
+                    {
+                        name: 'Ana Paula',
+                        email: 'ana@email.com',
+                        wishes: 'Blusa de lã, Velas aromáticas, Kit de maquiagem',
+                        restrictions: 'Tamanho M, Cores neutras',
+                        budget: '150-200',
+                        id: 4
+                    }
+                ];
+                
+                // Salvar participantes de exemplo
+                saveToLocalStorage();
+            }
             
             // Atualizar lista inicial
             updateParticipantsList();
@@ -920,6 +1094,21 @@
             document.getElementById('participantForm').addEventListener('submit', addParticipant);
             document.getElementById('drawButton').addEventListener('click', performDraw);
             document.getElementById('newDrawButton').addEventListener('click', newDraw);
+            document.getElementById('clearDataButton').addEventListener('click', clearAllData);
+            
+            // Adicionar evento para salvar mensagem quando alterada
+            document.getElementById('drawMessage').addEventListener('input', function() {
+                try {
+                    localStorage.setItem(STORAGE_KEYS.MESSAGE, this.value);
+                } catch (error) {
+                    console.error('Erro ao salvar mensagem:', error);
+                }
+            });
+            
+            // Mostrar mensagem de boas-vindas
+            if (loaded && participants.length > 0) {
+                console.log(`Bem-vindo de volta! ${participants.length} participantes carregados.`);
+            }
         });
     </script>
 </body>
