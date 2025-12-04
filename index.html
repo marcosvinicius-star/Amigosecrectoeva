@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AmigoSecretoEva | Amigo Secreto Moderno</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-light: #60a5fa;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #10b981;
+            --accent-color: #f59e0b;
+            --dark-color: #1e293b;
+            --light-color: #f8fafc;
+            --gray-color: #94a3b8;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex: 1;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #1e40af);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" opacity="0.1"><path d="M0,0 L100,0 L100,100 Z" fill="white"/></svg>');
+            background-size: cover;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-icon {
+            background-color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-icon i {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            line-height: 1.5;
+        }
+
+        /* Main Layout */
+        main {
+            padding: 2rem 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .card-header i {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-color);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to right, var(--secondary-color), #0da271);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-accent {
+            background: linear-gradient(to right, var(--accent-color), #d97706);
+        }
+
+        .btn-accent:hover {
+            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Participants List */
+        .participant-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background-color: #f8fafc;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .participant-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: var(--dark-color);
+        }
+
+        .participant-info p {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+
+        .participant-wish {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .participant-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--gray-color);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        /* Wish List */
+        .wish-list {
+            list-style-type: none;
+        }
+
+        .wish-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background-color: #eff6ff;
+            border-radius: 8px;
+        }
+
+        .wish-item i {
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+
+        /* Draw Section */
+        .draw-section {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .result-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 1.5rem;
+            display: none;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .result-header {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .result-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-details {
+            text-align: left;
+        }
+
+        .result-wishes {
+            background-color: #fef3c7;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-top: 1rem;
+        }
+
+        .result-wishes h4 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.5rem;
+            color: #92400e;
+        }
+
+        /* Instructions Section */
+        .instructions {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .instructions h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .instructions ol {
+            padding-left: 1.5rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.75rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--primary-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+            
+            .participant-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .participant-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .result-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .result-details {
+                text-align: center;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-bg"></div>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <h1>AmigoSecretoEva</h1>
+            </div>
+            <p class="tagline">Organize seu amigo secreto com estilo! Adicione participantes, liste seus desejos e faça o sorteio de forma fácil e moderna.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <main>
+            <!-- Coluna Esquerda: Cadastro e Lista de Participantes -->
+            <div class="left-column">
+                <!-- Formulário de Cadastro -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-user-plus"></i>
+                        <h2>Adicionar Participante</h2>
+                    </div>
+                    
+                    <form id="participantForm">
+                        <div class="form-group">
+                            <label for="name">Nome Completo *</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="name" placeholder="Digite o nome completo" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" placeholder="Digite o e-mail" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="wishes">Lista de Desejos (Presentes)</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-gifts"></i>
+                                <textarea id="wishes" placeholder="Liste os presentes que você gostaria de receber. Separe por vírgulas ou linha. Exemplo: Livro, Camiseta, Perfume"></textarea>
+                            </div>
+                            <small>Dica: Seja específico para ajudar seu amigo secreto!</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="restrictions">Restrições ou Observações</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <textarea id="restrictions" placeholder="Alergias, tamanhos, coisas que não gosta, etc."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="budget">Faixa de Preço Sugerida</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-tags"></i>
+                                <select id="budget">
+                                    <option value="">Selecione uma faixa de preço</option>
+                                    <option value="ate-50">Até R$ 50,00</option>
+                                    <option value="50-100">R$ 50,00 - R$ 100,00</option>
+                                    <option value="100-150">R$ 100,00 - R$ 150,00</option>
+                                    <option value="150-200">R$ 150,00 - R$ 200,00</option>
+                                    <option value="acima-200">Acima de R$ 200,00</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-full">
+                            <i class="fas fa-plus-circle"></i> Adicionar Participante
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Lista de Participantes -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i>
+                        <h2>Participantes (<span id="participantCount">0</span>)</h2>
+                    </div>
+                    
+                    <div id="participantsList">
+                        <div class="empty-state">
+                            <i class="fas fa-user-friends"></i>
+                            <p>Nenhum participante adicionado ainda.</p>
+                            <p>Adicione o primeiro participante usando o formulário acima!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coluna Direita: Sorteio e Informações -->
+            <div class="right-column">
+                <!-- Área do Sorteio -->
+                <div class="draw-section card">
+                    <div class="card-header">
+                        <i class="fas fa-random"></i>
+                        <h2>Sorteio do Amigo Secreto</h2>
+                    </div>
+                    
+                    <p>Quando todos os participantes estiverem cadastrados, clique no botão abaixo para realizar o sorteio.</p>
+                    
+                    <div class="form-group" style="margin-top: 1.5rem;">
+                        <label for="drawMessage">Mensagem Personalizada para o Sorteio</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-comment-alt"></i>
+                            <input type="text" id="drawMessage" placeholder="Ex: Feliz Natal! Que a troca de presentes seja incrível!">
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 2rem 0;">
+                        <button id="drawButton" class="btn btn-accent btn-full" style="padding: 1rem; font-size: 1.1rem;">
+                            <i class="fas fa-gift"></i> Realizar Sorteio
+                        </button>
+                    </div>
+                    
+                    <div class="result-container" id="drawResult">
+                        <h3 class="result-header"><i class="fas fa-check-circle"></i> Sorteio Realizado com Sucesso!</h3>
+                        <p id="customMessage"></p>
+                        
+                        <div class="result-content">
+                            <div class="avatar" id="avatarFrom">JS</div>
+                            <div>
+                                <i class="fas fa-arrow-right fa-2x" style="color: var(--primary-color);"></i>
+                            </div>
+                            <div class="avatar" id="avatarTo">MA</div>
+                        </div>
+                        
+                        <div class="result-details">
+                            <h3><span id="resultFrom">João Silva</span> tirou <span id="resultTo">Maria Ana</span></h3>
+                            <p style="margin-top: 0.5rem;">Um e-mail foi enviado para <strong id="resultEmail">joao@email.com</strong> com o resultado.</p>
+                        </div>
+                        
+                        <div class="result-wishes">
+                            <h4><i class="fas fa-lightbulb"></i> Lista de Desejos da Pessoa Sorteada:</h4>
+                            <ul id="wishListResult" class="wish-list">
+                                <li class="wish-item"><i class="fas fa-star"></i> Livro de ficção científica</li>
+                                <li class="wish-item"><i class="fas fa-star"></i> Camiseta de banda</li>
+                                <li class="wish-item"><i class="fas fa-star"></i> Caneca personalizada</li>
+                            </ul>
+                        </div>
+                        
+                        <button id="newDrawButton" class="btn btn-full" style="margin-top: 1.5rem;">
+                            <i class="fas fa-redo"></i> Realizar Novo Sorteio
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Instruções -->
+                <div class="instructions">
+                    <h2><i class="fas fa-info-circle"></i> Como Funciona</h2>
+                    <ol>
+                        <li><strong>Adicione todos os participantes</strong> com seus nomes, e-mails e listas de desejos.</li>
+                        <li><strong>Revise a lista de participantes</strong> para garantir que todos estão corretos.</li>
+                        <li><strong>Clique em "Realizar Sorteio"</strong> para sortear os pares aleatoriamente.</li>
+                        <li><strong>Cada pessoa receberá por e-mail</strong> o nome da pessoa que tirou e sua lista de desejos.</li>
+                        <li><strong>Mantenha o segredo!</strong> Não revele quem você tirou até o dia da troca de presentes.</li>
+                    </ol>
+                    
+                    <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f0f9ff; border-radius: var(--border-radius);">
+                        <h4 style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+                            <i class="fas fa-lightbulb"></i> Dica para Lista de Desejos
+                        </h4>
+                        <p>Inclua opções em diferentes faixas de preço, marcas preferidas, cores favoritas e tamanhos (se for roupa). Quanto mais detalhes, mais fácil para quem vai presentear!</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>AmigoSecretoEva &copy; 2023 - Sistema moderno para organização de amigo secreto. Todos os direitos reservados.</p>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-shield-alt"></i> Privacidade</a>
+                <a href="#"><i class="fas fa-question-circle"></i> Ajuda</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contato</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Array para armazenar os participantes
+        let participants = [];
+        
+        // Função para atualizar a lista de participantes na tela
+        function updateParticipantsList() {
+            const participantsList = document.getElementById('participantsList');
+            const participantCount = document.getElementById('participantCount');
+            
+            // Atualizar contador
+            participantCount.textContent = participants.length;
+            
+            // Se não houver participantes, mostrar estado vazio
+            if (participants.length === 0) {
+                participantsList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-user-friends"></i>
+                        <p>Nenhum participante adicionado ainda.</p>
+                        <p>Adicione o primeiro participante usando o formulário acima!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Construir lista de participantes
+            let html = '';
+            participants.forEach((participant, index) => {
+                // Formatar lista de desejos
+                let wishesHTML = '';
+                if (participant.wishes && participant.wishes.trim() !== '') {
+                    const wishesArray = participant.wishes.split(/[,;\n]/).filter(w => w.trim() !== '');
+                    wishesHTML = wishesArray.slice(0, 2).map(wish => 
+                        `<span class="participant-wish"><i class="fas fa-gift"></i> ${wish.trim()}</span>`
+                    ).join('');
+                    
+                    if (wishesArray.length > 2) {
+                        wishesHTML += `<span class="participant-wish">+${wishesArray.length - 2} mais</span>`;
+                    }
+                }
+                
+                // Formatar orçamento
+                let budgetText = '';
+                switch(participant.budget) {
+                    case 'ate-50': budgetText = 'Até R$ 50'; break;
+                    case '50-100': budgetText = 'R$ 50 - R$ 100'; break;
+                    case '100-150': budgetText = 'R$ 100 - R$ 150'; break;
+                    case '150-200': budgetText = 'R$ 150 - R$ 200'; break;
+                    case 'acima-200': budgetText = 'Acima de R$ 200'; break;
+                    default: budgetText = 'Não informado';
+                }
+                
+                html += `
+                    <div class="participant-item">
+                        <div class="participant-info">
+                            <h4>${participant.name}</h4>
+                            <p>${participant.email} • Orçamento: ${budgetText}</p>
+                            ${wishesHTML}
+                            ${participant.restrictions ? `<p style="margin-top: 0.5rem; font-size: 0.85rem; color: #ef4444;"><i class="fas fa-exclamation-triangle"></i> ${participant.restrictions}</p>` : ''}
+                        </div>
+                        <div class="participant-actions">
+                            <button class="btn btn-small" onclick="editParticipant(${index})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-small btn-secondary" onclick="removeParticipant(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            participantsList.innerHTML = html;
+        }
+        
+        // Função para adicionar um participante
+        function addParticipant(event) {
+            event.preventDefault();
+            
+            // Obter valores do formulário
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const wishes = document.getElementById('wishes').value;
+            const restrictions = document.getElementById('restrictions').value;
+            const budget = document.getElementById('budget').value;
+            
+            // Validar dados
+            if (!name || !email) {
+                alert('Por favor, preencha pelo menos o nome e e-mail do participante.');
+                return;
+            }
+            
+            // Validar e-mail
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Por favor, insira um e-mail válido.');
+                return;
+            }
+            
+            // Verificar se o e-mail já está cadastrado
+            if (participants.some(p => p.email.toLowerCase() === email.toLowerCase())) {
+                alert('Já existe um participante com este e-mail.');
+                return;
+            }
+            
+            // Adicionar participante ao array
+            participants.push({
+                name,
+                email,
+                wishes,
+                restrictions,
+                budget,
+                id: Date.now() // ID único baseado no timestamp
+            });
+            
+            // Atualizar a lista
+            updateParticipantsList();
+            
+            // Limpar formulário
+            document.getElementById('participantForm').reset();
+            
+            // Mostrar mensagem de sucesso
+            alert(`Participante ${name} adicionado com sucesso!`);
+        }
+        
+        // Função para remover um participante
+        function removeParticipant(index) {
+            if (confirm(`Tem certeza que deseja remover ${participants[index].name} da lista?`)) {
+                participants.splice(index, 1);
+                updateParticipantsList();
+            }
+        }
+        
+        // Função para editar um participante
+        function editParticipant(index) {
+            const participant = participants[index];
+            
+            // Preencher formulário com dados do participante
+            document.getElementById('name').value = participant.name;
+            document.getElementById('email').value = participant.email;
+            document.getElementById('wishes').value = participant.wishes;
+            document.getElementById('restrictions').value = participant.restrictions;
+            document.getElementById('budget').value = participant.budget;
+            
+            // Remover participante do array (será readicionado ao enviar o formulário)
+            participants.splice(index, 1);
+            
+            // Atualizar lista
+            updateParticipantsList();
+            
+            // Rolar para o formulário
+            document.getElementById('name').focus();
+        }
+        
+        // Função para realizar o sorteio
+        function performDraw() {
+            // Verificar se há participantes suficientes
+            if (participants.length < 2) {
+                alert('É necessário pelo menos 2 participantes para realizar o sorteio.');
+                return;
+            }
+            
+            // Obter mensagem personalizada
+            const customMessage = document.getElementById('drawMessage').value || 
+                                 "Que a troca de presentes seja incrível! Lembre-se de manter o segredo até o dia da revelação.";
+            
+            // Realizar sorteio (algoritmo simples)
+            const shuffled = [...participants].sort(() => Math.random() - 0.5);
+            const pairs = [];
+            
+            // Criar pares circulares
+            for (let i = 0; i < shuffled.length; i++) {
+                const from = shuffled[i];
+                const to = shuffled[(i + 1) % shuffled.length];
+                pairs.push({ from, to });
+            }
+            
+            // Selecionar um par aleatório para mostrar como exemplo
+            const randomPairIndex = Math.floor(Math.random() * pairs.length);
+            const examplePair = pairs[randomPairIndex];
+            
+            // Formatar lista de desejos para exibição
+            let wishListHTML = '';
+            if (examplePair.to.wishes && examplePair.to.wishes.trim() !== '') {
+                const wishesArray = examplePair.to.wishes.split(/[,;\n]/).filter(w => w.trim() !== '');
+                wishListHTML = wishesArray.map(wish => 
+                    `<li class="wish-item"><i class="fas fa-star"></i> ${wish.trim()}</li>`
+                ).join('');
+            } else {
+                wishListHTML = '<li class="wish-item"><i class="fas fa-star"></i> Nenhuma preferência informada</li>';
+            }
+            
+            // Atualizar elementos do resultado
+            document.getElementById('customMessage').textContent = customMessage;
+            document.getElementById('resultFrom').textContent = examplePair.from.name;
+            document.getElementById('resultTo').textContent = examplePair.to.name;
+            document.getElementById('resultEmail').textContent = examplePair.from.email;
+            document.getElementById('wishListResult').innerHTML = wishListHTML;
+            
+            // Atualizar avatares com iniciais
+            document.getElementById('avatarFrom').textContent = getInitials(examplePair.from.name);
+            document.getElementById('avatarTo').textContent = getInitials(examplePair.to.name);
+            
+            // Mostrar resultado
+            document.getElementById('drawResult').style.display = 'block';
+            
+            // Simular envio de e-mails (apenas demonstração)
+            simulateEmailSend(pairs);
+            
+            // Rolar para o resultado
+            document.getElementById('drawResult').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Função para obter iniciais de um nome
+        function getInitials(name) {
+            return name.split(' ')
+                .map(part => part.charAt(0))
+                .join('')
+                .toUpperCase()
+                .substring(0, 2);
+        }
+        
+        // Função para simular envio de e-mails
+        function simulateEmailSend(pairs) {
+            console.log('=== SIMULAÇÃO DE ENVIO DE E-MAILS ===');
+            pairs.forEach(pair => {
+                console.log(`E-mail enviado para: ${pair.from.email}`);
+                console.log(`Assunto: Seu amigo secreto foi sorteado! - AmigoSecretoEva`);
+                console.log(`Conteúdo: Olá ${pair.from.name}, você tirou ${pair.to.name} no amigo secreto!`);
+                
+                if (pair.to.wishes) {
+                    console.log(`Lista de desejos: ${pair.to.wishes}`);
+                }
+                
+                console.log('---');
+            });
+            console.log('Todos os e-mails foram enviados com sucesso!');
+        }
+        
+        // Função para realizar novo sorteio
+        function newDraw() {
+            // Esconder resultado
+            document.getElementById('drawResult').style.display = 'none';
+            
+            // Limpar mensagem personalizada
+            document.getElementById('drawMessage').value = '';
+            
+            // Rolar para o topo do sorteio
+            document.getElementById('drawButton').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Adicionar participantes de exemplo (apenas para demonstração)
+            participants = [
+               
+            ];
+            
+            // Atualizar lista inicial
+            updateParticipantsList();
+            
+            // Configurar eventos
+            document.getElementById('participantForm').addEventListener('submit', addParticipant);
+            document.getElementById('drawButton').addEventListener('click', performDraw);
+            document.getElementById('newDrawButton').addEventListener('click', newDraw);
+        });
+    </script>
+</body>
+</html>
